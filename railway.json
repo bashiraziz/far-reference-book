@@ -8,7 +8,7 @@
         "install": {
           "dependsOn": ["setup"],
           "cmds": [
-            "cd backend && pip install -r requirements.txt"
+            "cd backend && pip install --break-system-packages -r requirements.txt"
           ]
         }
       }
