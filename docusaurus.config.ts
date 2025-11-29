@@ -17,7 +17,7 @@ const config: Config = {
   baseUrl: '/',
 
   // GitHub pages deployment config
-  organizationName: 'your-username',
+  organizationName: 'Bashir Aziz',
   projectName: 'far-reference-book',
 
   onBrokenLinks: 'warn', // Changed to warn to avoid build failures on broken links
@@ -49,10 +49,10 @@ const config: Config = {
       respectPrefersColorScheme: true,
     },
     navbar: {
-      title: 'FAR Reference',
+      title: 'Reference',
       logo: {
         alt: 'FAR Logo',
-        src: 'img/logo.svg',
+        src: 'img/logo.jpg',
       },
       items: [
         {
