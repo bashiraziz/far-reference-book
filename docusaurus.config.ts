@@ -56,7 +56,7 @@ const config: Config = {
       },
       items: [
         {
-          href: 'https://github.com/your-username/far-reference-book',
+          href: 'https://github.com/bashiraziz/far-reference-book.git',
           label: 'GitHub',
           position: 'right',
         },
