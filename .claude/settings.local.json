@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git checkout:*)",
+      "Bash(npm start)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(taskkill /F /PID 31392)",
+      "Bash(taskkill //F //PID 31392)",
+      "Bash(timeout /t 10 /nobreak)",
+      "Bash(curl:*)",
+      "Bash(venv/Scripts/python:*)",
+      "Bash(git rm:*)",
+      "Bash(git check-ignore:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
