@@ -42,8 +42,10 @@ class Settings(BaseSettings):
     log_level: str = "INFO"
 
     class Config:
-        env_file = ".env"
+        # Look for .env in backend directory
+        env_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env")
         case_sensitive = False
+        extra = "ignore"  # Ignore extra fields in .env
 
 
 # Global settings instance

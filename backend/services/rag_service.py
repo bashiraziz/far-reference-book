@@ -75,9 +75,12 @@ class RAGService:
             payload = chunk["payload"]
             score = chunk["score"]
 
+            # Support both 'text' and 'content' field names for backward compatibility
+            text_content = payload.get('text') or payload.get('content', '')
+
             context_parts.append(
                 f"[Source {i}] FAR Section {payload['section']} (Relevance: {score:.2f})\n"
-                f"{payload['text']}\n"
+                f"{text_content}\n"
             )
 
         return "\n---\n\n".join(context_parts)
@@ -209,13 +212,15 @@ Guidelines:
         sources = []
         for chunk in chunks:
             payload = chunk["payload"]
+            # Support both 'text' and 'content' field names
+            text_content = payload.get('text') or payload.get('content', '')
             sources.append({
                 "chunk_id": str(chunk["id"]),
                 "chapter": payload.get("chapter", 1),
                 "section": payload.get("section", ""),
                 "page": payload.get("page"),
                 "relevance_score": chunk["score"],
-                "excerpt": payload.get("text", "")[:200]  # First 200 chars
+                "excerpt": text_content[:200]  # First 200 chars
             })
 
         return {

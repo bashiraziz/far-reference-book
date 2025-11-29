@@ -12,12 +12,12 @@ const config: Config = {
   },
 
   // Set the production url of your site here
-  url: 'https://your-username.github.io',
+  url: 'https://bashiraziz.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
-  baseUrl: '/',
+  baseUrl: '/far-reference-book/',
 
   // GitHub pages deployment config
-  organizationName: 'Bashir Aziz',
+  organizationName: 'bashiraziz',
   projectName: 'far-reference-book',
 
   onBrokenLinks: 'warn', // Changed to warn to avoid build failures on broken links

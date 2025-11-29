@@ -120,14 +120,14 @@ class VectorStoreService:
                 ]
             )
 
-        # Search
-        results = client.search(
+        # Search using query_points (newer Qdrant API)
+        results = client.query_points(
             collection_name=collection_name,
-            query_vector=query_vector,
+            query=query_vector,
             limit=limit,
             query_filter=query_filter,
             score_threshold=score_threshold
-        )
+        ).points
 
         # Format results
         formatted_results = []
