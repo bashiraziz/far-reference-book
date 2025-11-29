@@ -5,7 +5,7 @@
  */
 
 const API_BASE_URL = typeof window !== 'undefined' && (window as any).env?.REACT_APP_BACKEND_URL
-  || 'https://yamanote.proxy.rlwy.net:44643';
+  || 'https://far-reference-book-production.up.railway.app';
 
 export interface Source {
   chunk_id: string;
