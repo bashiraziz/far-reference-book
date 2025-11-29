@@ -5,7 +5,7 @@
  */
 
 const API_BASE_URL = typeof window !== 'undefined' && (window as any).env?.REACT_APP_BACKEND_URL
-  || 'http://localhost:8000';
+  || 'https://yamanote.proxy.rlwy.net:44643';
 
 export interface Source {
   chunk_id: string;
