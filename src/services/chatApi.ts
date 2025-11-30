@@ -4,8 +4,20 @@
  * Handles all HTTP communication with the FastAPI backend.
  */
 
-const API_BASE_URL = typeof window !== 'undefined' && (window as any).env?.REACT_APP_BACKEND_URL
-  || 'https://far-reference-book-production.up.railway.app';
+// Get backend URL from Docusaurus siteConfig
+const getBackendUrl = (): string => {
+  if (typeof window !== 'undefined') {
+    // Access Docusaurus siteConfig
+    const siteConfig = (window as any).docusaurus?.siteConfig;
+    if (siteConfig?.customFields?.backendUrl) {
+      return siteConfig.customFields.backendUrl as string;
+    }
+  }
+  // Fallback to localhost for development
+  return 'http://localhost:8000';
+};
+
+const API_BASE_URL = getBackendUrl();
 
 export interface Source {
   chunk_id: string;

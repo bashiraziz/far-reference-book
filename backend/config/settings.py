@@ -30,10 +30,10 @@ class Settings(BaseSettings):
 
     # RAG Settings
     embedding_model: str = "text-embedding-3-small"
-    embedding_dimensions: int = 1536
+    embedding_dimensions: int = 512  # Optimized for ~512MB storage
     max_chunk_retrieval: int = 5
-    chunk_size: int = 1000
-    chunk_overlap: int = 200
+    chunk_size: int = 600  # Optimized for better context while staying under 700MB
+    chunk_overlap: int = 150  # Proportional overlap (25%)
 
     # CORS
     cors_origins: str = "http://localhost:3000,http://localhost:3001"

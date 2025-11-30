@@ -78,8 +78,11 @@ class RAGService:
             # Support both 'text' and 'content' field names for backward compatibility
             text_content = payload.get('text') or payload.get('content', '')
 
+            # Support different metadata field names
+            section_info = payload.get('section') or payload.get('file', 'Unknown')
+
             context_parts.append(
-                f"[Source {i}] FAR Section {payload['section']} (Relevance: {score:.2f})\n"
+                f"[Source {i}] FAR Section {section_info} (Relevance: {score:.2f})\n"
                 f"{text_content}\n"
             )
 
