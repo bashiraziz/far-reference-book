@@ -29,7 +29,10 @@ const config: Config = {
 
   // Custom fields for environment configuration
   customFields: {
-    backendUrl: process.env.BACKEND_URL || 'http://localhost:8000',
+    backendUrl: process.env.BACKEND_URL ||
+      (process.env.NODE_ENV === 'production'
+        ? 'https://far-reference-book-production.up.railway.app'
+        : 'http://localhost:8000'),
   },
 
   presets: [
