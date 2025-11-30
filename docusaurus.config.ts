@@ -32,7 +32,7 @@ const config: Config = {
     backendUrl: process.env.BACKEND_URL ||
       (process.env.NODE_ENV === 'production'
         ? 'https://far-reference-book-production.up.railway.app'
-        : 'http://localhost:8000'),
+        : 'http://localhost:8080'),
   },
 
   presets: [

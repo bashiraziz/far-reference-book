@@ -5,12 +5,12 @@ This file contains all the code changes from our session. Use this to restore an
 ## 1. src/services/chatApi.ts
 **Line 7** - Change from:
 ```typescript
-const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
+const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8080';
 ```
 To:
 ```typescript
 const API_BASE_URL = typeof window !== 'undefined' && (window as any).env?.REACT_APP_BACKEND_URL
-  || 'http://localhost:8000';
+  || 'http://localhost:8080';
 ```
 
 ## 2. src/components/chatbot/ChatButton.css

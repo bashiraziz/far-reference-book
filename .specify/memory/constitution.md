@@ -119,7 +119,7 @@ This is a unified book project using Claude Code and Spec-Kit Plus. The core del
 - Railway automatic deployment on backend changes
 
 **Environments**:
-- Development: Local (localhost:3000 frontend, localhost:8000 backend)
+- Development: Local (localhost:3000 frontend, localhost:8080 backend)
 - Production: GitHub Pages + Railway
 
 **Monitoring**:
