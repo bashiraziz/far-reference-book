@@ -4,20 +4,53 @@
  * Handles all HTTP communication with the FastAPI backend.
  */
 
-// Get backend URL from Docusaurus siteConfig
-const getBackendUrl = (): string => {
+const DEFAULT_LOCAL_BACKEND_URLS = [
+  'http://localhost:8000',
+  'http://127.0.0.1:8000',
+  'http://localhost:8080',
+  'http://127.0.0.1:8080',
+];
+
+// Resolve backend URL from env or Docusaurus siteConfig
+const getBackendUrl = (): string | undefined => {
+  const env =
+    typeof globalThis !== 'undefined'
+      ? (globalThis as any)?.process?.env
+      : undefined;
+
+  if (env?.BACKEND_URL) {
+    return env.BACKEND_URL as string;
+  }
+  if (env?.REACT_APP_BACKEND_URL) {
+    return env.REACT_APP_BACKEND_URL as string;
+  }
+
   if (typeof window !== 'undefined') {
-    // Access Docusaurus siteConfig
     const siteConfig = (window as any).docusaurus?.siteConfig;
     if (siteConfig?.customFields?.backendUrl) {
       return siteConfig.customFields.backendUrl as string;
     }
   }
-  // Fallback to localhost for development
-  return 'http://localhost:8000';
+
+  return undefined;
 };
 
-const API_BASE_URL = getBackendUrl();
+const configuredBackendUrl = getBackendUrl();
+const API_BASE_URL =
+  configuredBackendUrl ?? DEFAULT_LOCAL_BACKEND_URLS[0];
+
+const buildPreferredBaseUrls = (initial?: string): string[] => {
+  const urls: string[] = [];
+  if (initial) {
+    urls.push(initial);
+  }
+  for (const fallbackUrl of DEFAULT_LOCAL_BACKEND_URLS) {
+    if (!urls.includes(fallbackUrl)) {
+      urls.push(fallbackUrl);
+    }
+  }
+  return urls;
+};
 
 export interface Source {
   chunk_id: string;
@@ -64,15 +97,48 @@ export interface ChatResponse {
 
 class ChatAPI {
   private baseUrl: string;
+  private preferredBaseUrls: string[];
 
   constructor() {
-    this.baseUrl = API_BASE_URL;
+    this.preferredBaseUrls = buildPreferredBaseUrls(API_BASE_URL);
+    this.baseUrl = this.preferredBaseUrls[0];
+  }
+
+  private setActiveBaseUrl(url: string) {
+    this.baseUrl = url;
+    this.preferredBaseUrls = [
+      url,
+      ...this.preferredBaseUrls.filter((candidate) => candidate !== url),
+    ];
+  }
+
+  private async fetchWithFallback(
+    path: string,
+    options?: RequestInit
+  ): Promise<Response> {
+    let lastError: unknown;
+
+    for (const baseUrl of this.preferredBaseUrls) {
+      try {
+        const response = await fetch(`${baseUrl}${path}`, options);
+
+        if (baseUrl !== this.baseUrl) {
+          this.setActiveBaseUrl(baseUrl);
+        }
+
+        return response;
+      } catch (error) {
+        lastError = error;
+      }
+    }
+
+    throw lastError ?? new Error('Unable to reach FAR chatbot backend.');
   }
 
   async createConversation(
     request: CreateConversationRequest = {}
   ): Promise<Conversation> {
-    const response = await fetch(`${this.baseUrl}/conversations`, {
+    const response = await this.fetchWithFallback('/conversations', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -88,8 +154,8 @@ class ChatAPI {
   }
 
   async getConversation(conversationId: string): Promise<Conversation> {
-    const response = await fetch(
-      `${this.baseUrl}/conversations/${conversationId}`
+    const response = await this.fetchWithFallback(
+      `/conversations/${conversationId}`
     );
 
     if (!response.ok) {
@@ -100,8 +166,8 @@ class ChatAPI {
   }
 
   async getMessages(conversationId: string): Promise<Message[]> {
-    const response = await fetch(
-      `${this.baseUrl}/conversations/${conversationId}/messages`
+    const response = await this.fetchWithFallback(
+      `/conversations/${conversationId}/messages`
     );
 
     if (!response.ok) {
@@ -116,13 +182,16 @@ class ChatAPI {
     request: SendMessageRequest
   ): Promise<ChatResponse> {
     // Use simplified endpoint as workaround
-    const response = await fetch(`${this.baseUrl}/chat/${conversationId}/messages/simple`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(request),
-    });
+    const response = await this.fetchWithFallback(
+      `/chat/${conversationId}/messages/simple`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(request),
+      }
+    );
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
