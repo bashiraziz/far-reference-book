@@ -248,3 +248,4 @@ backend/
 **Last Amended**: 2025-11-30
 **Project**: FAR Reference Book
 **Technology**: Claude Code + Spec-Kit Plus + Docusaurus + FastAPI + OpenAI
+Which port to use for back end?
