@@ -80,7 +80,7 @@ All your code has been successfully recreated from memory. Here's what was resto
 2. **Start the backend**:
    ```bash
    cd backend
-   venv/Scripts/python -m uvicorn api.main:app --reload --host 127.0.0.1 --port 8000
+   venv/Scripts/python -m uvicorn api.main:app --reload --host 127.0.0.1 --port 8080
    ```
 
 3. **Start the frontend** (in separate terminal):
