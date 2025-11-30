@@ -36,7 +36,11 @@ class Settings(BaseSettings):
     chunk_overlap: int = 200
 
     # CORS
-    cors_origins: list[str] = ["http://localhost:3000", "http://localhost:3001"]
+    cors_origins: str = "http://localhost:3000,http://localhost:3001"
+
+    def get_cors_origins(self) -> list[str]:
+        """Parse CORS origins from comma-separated string."""
+        return [origin.strip() for origin in self.cors_origins.split(",")]
 
     # Logging
     log_level: str = "INFO"
