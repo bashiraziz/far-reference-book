@@ -5,11 +5,8 @@
  */
 
 const DEFAULT_LOCAL_BACKEND_URLS = [
-  'far-reference-book-production.up.railway.app',
-  'http://localhost:',
-  'http://127.0.0.1:8080',
-  'http://localhost:8080',
-  'http://127.0.0.1:8080',
+  'https://far-reference-book-production.up.railway.app',
+
 ];
 
 // Resolve backend URL from env or Docusaurus siteConfig

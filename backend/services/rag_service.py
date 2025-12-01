@@ -6,21 +6,95 @@ Handles semantic search, context formatting, and OpenAI response generation.
 
 from typing import List, Dict, Any, Optional
 import time
+import re
+from pathlib import Path
 
 from openai import OpenAI
 
 from backend.services.vector_store import VectorStoreService
 from backend.services.embeddings import EmbeddingsService
 from backend.config.settings import settings
+from backend.services.text_chunker import TextChunker
 
 
 class RAGService:
     """Manages RAG pipeline for question answering."""
 
+    SECTION_PATTERN = re.compile(r'\b(\d{1,2}\.\d{1,3}(?:-\d{1,3})?)\b')
+    DOCS_DIR = Path(__file__).resolve().parents[2] / "docs"
+
     @classmethod
     def get_openai_client(cls) -> OpenAI:
         """Get OpenAI client instance."""
         return OpenAI(api_key=settings.openai_api_key)
+
+    @classmethod
+    def _extract_section_references(cls, query: str) -> List[str]:
+        """Find FAR section identifiers mentioned explicitly in the query."""
+        if not query:
+            return []
+
+        matches = cls.SECTION_PATTERN.findall(query)
+        # Preserve order while deduplicating
+        seen = set()
+        sections: List[str] = []
+        for match in matches:
+            if match not in seen:
+                seen.add(match)
+                sections.append(match)
+        return sections
+
+    @classmethod
+    def _strip_front_matter(cls, content: str) -> str:
+        """Remove YAML front matter from markdown text if present."""
+        if content.startswith('---'):
+            parts = content.split('---', 2)
+            if len(parts) >= 3:
+                return parts[2].strip()
+        return content.strip()
+
+    @classmethod
+    def _load_section_chunks(cls, section_id: str) -> List[Dict[str, Any]]:
+        """Load markdown content for a FAR section directly from docs."""
+        if not cls.DOCS_DIR.exists():
+            return []
+
+        part_number = section_id.split('.', 1)[0]
+        file_path = cls.DOCS_DIR / f"part-{part_number}" / f"{section_id}.md"
+
+        if not file_path.exists():
+            return []
+
+        try:
+            content = file_path.read_text(encoding='utf-8')
+        except Exception:
+            return []
+
+        text = cls._strip_front_matter(content)
+        if not text:
+            return []
+
+        chunks = TextChunker.chunk_text(text)
+        if not chunks:
+            return []
+
+        payloads: List[Dict[str, Any]] = []
+        chapter = int(part_number)
+
+        for idx, chunk in enumerate(chunks):
+            payloads.append({
+                "id": f"section-{section_id}-{idx}",
+                "score": 0.99,
+                "payload": {
+                    "text": chunk,
+                    "chapter": chapter,
+                    "section": section_id,
+                    "source_file": str(file_path),
+                    "chunk_index": idx
+                }
+            })
+
+        return payloads
 
     @classmethod
     def retrieve_context(
@@ -42,6 +116,17 @@ class RAGService:
         Returns:
             List of retrieved chunks with metadata
         """
+        # Prefer direct section lookups when a FAR citation is explicitly referenced
+        section_refs = cls._extract_section_references(query)
+        direct_chunks: List[Dict[str, Any]] = []
+        for section_id in section_refs:
+            direct_chunks.extend(cls._load_section_chunks(section_id))
+            if len(direct_chunks) >= max_chunks:
+                break
+
+        if direct_chunks:
+            return direct_chunks[:max_chunks]
+
         # Generate query embedding
         query_embedding = EmbeddingsService.generate_embedding(query)
 

@@ -36,7 +36,7 @@ class Settings(BaseSettings):
     chunk_overlap: int = 150  # Proportional overlap (25%)
 
     # CORS
-    cors_origins: str = "http://localhost:3000,http://localhost:3001"
+    cors_origins: str = "https://bashiraziz.github.io,http://localhost:3000,http://localhost:3001,https://bashiraziz.github.io,https://bashiraziz.github.io/far-reference-book"
 
     def get_cors_origins(self) -> list[str]:
         """Parse CORS origins from comma-separated string."""
