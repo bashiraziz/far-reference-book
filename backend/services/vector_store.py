@@ -6,7 +6,14 @@ Handles storage and retrieval of embedded FAR content.
 
 from typing import List, Dict, Any, Optional
 from qdrant_client import QdrantClient
-from qdrant_client.models import Distance, VectorParams, PointStruct, Filter, FieldCondition, MatchValue
+from qdrant_client.models import (
+    Distance,
+    VectorParams,
+    PointStruct,
+    Filter,
+    FieldCondition,
+    MatchValue,
+)
 
 from backend.config.settings import settings
 from backend.config.logging import logger
@@ -47,17 +54,41 @@ class VectorStoreService:
 
         if exists:
             logger.info(f"Collection '{collection_name}' already exists")
-            return
-
-        # Create collection
-        client.create_collection(
-            collection_name=collection_name,
-            vectors_config=VectorParams(
-                size=settings.embedding_dimensions,
-                distance=Distance.COSINE
+        else:
+            # Create collection
+            client.create_collection(
+                collection_name=collection_name,
+                vectors_config=VectorParams(
+                    size=settings.embedding_dimensions,
+                    distance=Distance.COSINE
+                )
             )
-        )
-        logger.info(f"Created collection '{collection_name}'")
+            logger.info(f"Created collection '{collection_name}'")
+
+        # Ensure useful payload indexes exist
+        cls.ensure_payload_indexes(collection_name)
+
+    @classmethod
+    def ensure_payload_indexes(cls, collection_name: Optional[str] = None):
+        """Create payload indexes needed for filtering."""
+        if collection_name is None:
+            collection_name = settings.qdrant_collection_name
+
+        client = cls.get_client()
+        for field_name, schema in [("file", "keyword"), ("section", "keyword")]:
+            try:
+                client.create_payload_index(
+                    collection_name=collection_name,
+                    field_name=field_name,
+                    field_schema=schema,
+                )
+                logger.info(f"Created payload index for '{field_name}'")
+            except Exception as exc:
+                message = str(exc)
+                if "already exists" not in message:
+                    logger.warning(
+                        f"Failed to create payload index for '{field_name}': {message}"
+                    )
 
     @classmethod
     def upsert_points(
@@ -87,6 +118,7 @@ class VectorStoreService:
         query_vector: List[float],
         limit: int = 5,
         chapter_filter: Optional[int] = None,
+        file_name: Optional[str] = None,
         score_threshold: float = 0.5,
         collection_name: str = None
     ) -> List[Dict[str, Any]]:
@@ -97,6 +129,7 @@ class VectorStoreService:
             query_vector: Query embedding
             limit: Maximum number of results
             chapter_filter: Optional chapter number filter (1-3)
+            file_name: Optional FAR section file name filter (e.g., "1.102-1")
             score_threshold: Minimum similarity score
             collection_name: Target collection (default from settings)
 
@@ -108,17 +141,26 @@ class VectorStoreService:
 
         client = cls.get_client()
 
-        # Build filter if chapter specified
-        query_filter = None
+        # Build filter if chapter or file specified
+        must_conditions = []
         if chapter_filter is not None:
-            query_filter = Filter(
-                must=[
-                    FieldCondition(
-                        key="chapter",
-                        match=MatchValue(value=chapter_filter)
-                    )
-                ]
+            must_conditions.append(
+                FieldCondition(
+                    key="chapter",
+                    match=MatchValue(value=chapter_filter)
+                )
             )
+        if file_name:
+            cls.ensure_payload_indexes(collection_name)
+            normalized = file_name if file_name.endswith(".md") else f"{file_name}.md"
+            must_conditions.append(
+                FieldCondition(
+                    key="file",
+                    match=MatchValue(value=normalized)
+                )
+            )
+
+        query_filter = Filter(must=must_conditions) if must_conditions else None
 
         # Search using query_points (newer Qdrant API)
         results = client.query_points(

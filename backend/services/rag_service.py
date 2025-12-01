@@ -6,6 +6,7 @@ Handles semantic search, context formatting, and OpenAI response generation.
 
 from typing import List, Dict, Any, Optional
 import time
+import re
 
 from openai import OpenAI
 
@@ -16,6 +17,8 @@ from backend.config.settings import settings
 
 class RAGService:
     """Manages RAG pipeline for question answering."""
+
+    SECTION_PATTERN = re.compile(r'\b(\d{1,2}\.\d{1,3}(?:-\d{1,3})?)\b')
 
     @classmethod
     def get_openai_client(cls) -> OpenAI:
@@ -42,8 +45,22 @@ class RAGService:
         Returns:
             List of retrieved chunks with metadata
         """
-        # Generate query embedding
+        # Generate query embedding once
         query_embedding = EmbeddingsService.generate_embedding(query)
+
+        # If the question explicitly references FAR sections, try to scope the search.
+        section_refs = cls.SECTION_PATTERN.findall(query)
+        if section_refs:
+            for section_id in section_refs:
+                targeted_results = VectorStoreService.search(
+                    query_vector=query_embedding,
+                    limit=max_chunks,
+                    chapter_filter=chapter_filter,
+                    file_name=section_id,
+                    score_threshold=0.0  # allow all results when filtering by section
+                )
+                if targeted_results:
+                    return targeted_results
 
         # Search vector database
         results = VectorStoreService.search(
