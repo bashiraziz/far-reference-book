@@ -45,7 +45,8 @@
       "Bash(npm run clear:*)",
       "Bash(backend\\venv\\Scripts\\python -m uvicorn:*)",
       "Bash(timeout 120 cat:*)",
-      "Bash(for i in 26 27 28 29 30)"
+      "Bash(for i in 26 27 28 29 30)",
+      "Bash(timeout 120 python:*)"
     ],
     "deny": [],
     "ask": []
