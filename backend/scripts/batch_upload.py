@@ -42,7 +42,7 @@ except:
 # Get all files
 docs_dir = Path(__file__).parent.parent.parent / 'docs'
 all_files = []
-for part_num in range(31, 36):
+for part_num in range(36, 41):
     part_dir = docs_dir / f'part-{part_num}'
     if part_dir.exists():
         all_files.extend(sorted(part_dir.glob('*.md')))
