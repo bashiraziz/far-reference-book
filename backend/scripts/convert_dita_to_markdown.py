@@ -201,8 +201,8 @@ def main():
 
     total_converted = 0
 
-    # Process Parts 4-25
-    for part_num in range(4, 26):
+    # Process Parts 31-35
+    for part_num in range(31, 36):
         count = process_part(part_num, project_root)
         total_converted += count
 
