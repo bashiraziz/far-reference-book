@@ -119,6 +119,7 @@ class VectorStoreService:
         limit: int = 5,
         chapter_filter: Optional[int] = None,
         file_name: Optional[str] = None,
+        section_value: Optional[str] = None,
         score_threshold: float = 0.5,
         collection_name: str = None
     ) -> List[Dict[str, Any]]:
@@ -130,6 +131,7 @@ class VectorStoreService:
             limit: Maximum number of results
             chapter_filter: Optional chapter number filter (1-3)
             file_name: Optional FAR section file name filter (e.g., "1.102-1")
+            section_value: Optional FAR section number filter (e.g., "5.101")
             score_threshold: Minimum similarity score
             collection_name: Target collection (default from settings)
 
@@ -157,6 +159,14 @@ class VectorStoreService:
                 FieldCondition(
                     key="file",
                     match=MatchValue(value=normalized)
+                )
+            )
+        if section_value:
+            cls.ensure_payload_indexes(collection_name)
+            must_conditions.append(
+                FieldCondition(
+                    key="section",
+                    match=MatchValue(value=section_value)
                 )
             )
 

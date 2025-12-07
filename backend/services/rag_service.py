@@ -19,6 +19,7 @@ class RAGService:
     """Manages RAG pipeline for question answering."""
 
     SECTION_PATTERN = re.compile(r'\b(\d{1,2}\.\d{1,3}(?:-\d{1,3})?)\b')
+    FALLBACK_SCORE_THRESHOLD = 0.0  # Used when initial search returns nothing
 
     @classmethod
     def get_openai_client(cls) -> OpenAI:
@@ -32,7 +33,7 @@ class RAGService:
         max_chunks: int = 5,
         chapter_filter: Optional[int] = None,
         score_threshold: float = 0.5
-    ) -> List[Dict[str, Any]]:
+    ) -> Dict[str, Any]:
         """
         Retrieve relevant FAR content chunks for a query.
 
@@ -43,10 +44,23 @@ class RAGService:
             score_threshold: Minimum similarity score (0-1)
 
         Returns:
-            List of retrieved chunks with metadata
+            Dictionary containing retrieved chunks and fallback details
         """
         # Generate query embedding once
         query_embedding = EmbeddingsService.generate_embedding(query)
+
+        def _make_result(
+            chunks: List[Dict[str, Any]],
+            fallback_used: bool,
+            threshold_used: float,
+            fallback_threshold: Optional[float]
+        ) -> Dict[str, Any]:
+            return {
+                "chunks": chunks,
+                "fallback_used": fallback_used,
+                "initial_threshold": threshold_used,
+                "fallback_threshold": fallback_threshold
+            }
 
         # If the question explicitly references FAR sections, try to scope the search.
         section_refs = cls.SECTION_PATTERN.findall(query)
@@ -56,11 +70,16 @@ class RAGService:
                     query_vector=query_embedding,
                     limit=max_chunks,
                     chapter_filter=chapter_filter,
-                    file_name=section_id,
+                    section_value=section_id,
                     score_threshold=0.0  # allow all results when filtering by section
                 )
                 if targeted_results:
-                    return targeted_results
+                    return _make_result(
+                        chunks=targeted_results,
+                        fallback_used=False,
+                        threshold_used=0.0,
+                        fallback_threshold=None
+                    )
 
         # Search vector database
         results = VectorStoreService.search(
@@ -70,7 +89,28 @@ class RAGService:
             score_threshold=score_threshold
         )
 
-        return results
+        if results:
+            return _make_result(
+                chunks=results,
+                fallback_used=False,
+                threshold_used=score_threshold,
+                fallback_threshold=None
+            )
+
+        # Try again with a much lower threshold before giving up completely.
+        fallback_results = VectorStoreService.search(
+            query_vector=query_embedding,
+            limit=max_chunks,
+            chapter_filter=chapter_filter,
+            score_threshold=cls.FALLBACK_SCORE_THRESHOLD
+        )
+
+        return _make_result(
+            chunks=fallback_results,
+            fallback_used=True,
+            threshold_used=score_threshold,
+            fallback_threshold=cls.FALLBACK_SCORE_THRESHOLD
+        )
 
     @classmethod
     def format_context(cls, chunks: List[Dict[str, Any]]) -> str:
@@ -139,7 +179,8 @@ Your role is to:
 Guidelines:
 - Only use information from the provided FAR sections
 - Always cite section numbers when referencing regulations
-- If the answer isn't in the provided context, say so clearly
+- If the context contains any FAR excerpts, you must answer using them.
+- Only say that no relevant information exists when the context literally says "No relevant FAR content found."
 - Be concise but complete in your explanations
 - Use professional but friendly tone"""
 
@@ -211,14 +252,28 @@ Guidelines:
             Dictionary with response, sources, and metadata
         """
         # Retrieve relevant context
-        chunks = cls.retrieve_context(
+        retrieval = cls.retrieve_context(
             query=query,
             max_chunks=settings.max_chunk_retrieval,
             chapter_filter=chapter_filter
         )
+        chunks = retrieval["chunks"]
 
         # Format context
         context = cls.format_context(chunks)
+
+        fallback_note: Optional[str] = None
+        if retrieval["fallback_used"]:
+            if chunks:
+                fallback_note = (
+                    "I couldn't find an exact FAR passage matching that question, "
+                    "so I'm sharing the closest related sections."
+                )
+            else:
+                fallback_note = (
+                    "I couldn't find any FAR passages that match that question, "
+                    "even after broadening the search."
+                )
 
         # Generate response
         response_data = cls.generate_response(
@@ -227,6 +282,9 @@ Guidelines:
             conversation_history=conversation_history,
             selected_text=selected_text
         )
+        final_content = response_data["content"]
+        if fallback_note:
+            final_content = f"{fallback_note}\n\n{final_content}"
 
         # Format sources for frontend
         sources = []
@@ -244,7 +302,7 @@ Guidelines:
             })
 
         return {
-            "content": response_data["content"],
+            "content": final_content,
             "sources": sources,
             "token_count": response_data["token_count"],
             "processing_time_ms": response_data["processing_time_ms"]
