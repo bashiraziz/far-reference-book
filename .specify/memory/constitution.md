@@ -81,7 +81,7 @@ This is a unified book project using Claude Code and Spec-Kit Plus. The core del
 ### V. Data Management
 
 **Content**:
-- FAR Parts 1-25 in DITA XML format
+- FAR Parts 1-53 in DITA XML format
 - Converted to Markdown for Docusaurus
 - Chunked and embedded for vector search
 
@@ -137,6 +137,9 @@ This is a unified book project using Claude Code and Spec-Kit Plus. The core del
 4. **Context Building** → Combine chunks with metadata
 5. **LLM Generation** → OpenAI generates answer with sources
 6. **Response Delivery** → Return answer + source citations
+7. **If the "I do not answer" or "there is no relevant FAR content provided" message is returned, then the user should be prompted to select a text**
+8. **If the quadrant does not have the relevent material to answer the question, then the Docuraurus should be used for reference and answer the question based on the selected text**
+9. **Answer to the question should not come from beyond the Qdrant and Docusaurus**
 
 ### API Design
 
@@ -245,6 +248,6 @@ backend/
 
 **Version**: 1.0.0
 **Ratified**: 2025-11-30
-**Last Amended**: 2025-11-30
+**Last Amended**: 2025-12-05
 **Project**: FAR Reference Book
-**Technology**: Claude Code + Spec-Kit Plus + Docusaurus + FastAPI + OpenAI
+**Technology**: Claude Code + Spec-Kit Plus + Docusaurus + FastAPI + OpenAI, Qdrant, Neon, GitHub Pages, Railway, OpenAI ChatKit, Better Auth

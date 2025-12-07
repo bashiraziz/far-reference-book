@@ -60,7 +60,34 @@ def chunk_text_generator(
         if chunk:
             yield chunk
 
-        start = end - chunk_overlap if end < text_length else end
+        # Calculate next start, ensuring we always advance to avoid infinite loops
+
+
+        if end < text_length:
+
+
+            new_start = end - chunk_overlap
+
+
+            # If new_start would move backwards, skip overlap entirely for this chunk
+
+
+            if new_start <= start:
+
+
+                start = end  # Jump to end, no overlap
+
+
+            else:
+
+
+                start = new_start
+
+
+        else:
+
+
+            start = end
 
 
 def extract_metadata_from_path(file_path: Path) -> Dict[str, Any]:

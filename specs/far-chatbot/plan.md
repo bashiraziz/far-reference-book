@@ -5,7 +5,7 @@
 **Feature**: FAR RAG Chatbot
 **Version**: 1.0.0
 **Status**: In Progress
-**Last Updated**: 2025-11-30
+**Last Updated**: 2025-12-05
 
 ## Executive Summary
 
@@ -133,7 +133,7 @@ Return: {answer, sources[]}
 ```python
 {
   "id": "uuid",
-  "vector": [1536 dimensions],  # text-embedding-3-small
+  "vector": [512 dimensions],  # text-embedding-3-small (reduced dimensions)
   "payload": {
     "text": "chunk content",
     "chapter": 4,
@@ -189,7 +189,7 @@ CREATE TABLE messages (
 
 **Purpose**: Convert text to vectors
 
-**Model**: OpenAI `text-embedding-3-small` (1536 dimensions)
+**Model**: OpenAI `text-embedding-3-small` (512 dimensions - optimized for storage)
 
 **Functions**:
 - `generate_embedding(text)` - Single text
@@ -197,6 +197,7 @@ CREATE TABLE messages (
 
 **Optimization**:
 - Batch requests for efficiency
+- Reduced dimensions (512 instead of 1536) for storage efficiency
 - Cache for repeated queries (future)
 - Handle rate limits gracefully
 
@@ -226,9 +227,9 @@ CREATE TABLE messages (
 6. Search Qdrant for relevant chunks
    Qdrant.search(
      collection="far_content",
-     query_vector=[...1536 dims...],
+     query_vector=[...512 dims...],
      limit=5,
-     score_threshold=0.7
+     score_threshold=0.5
    )
    ↓
 7. Build prompt with context
@@ -240,9 +241,9 @@ CREATE TABLE messages (
    ↓
 8. Generate answer
    OpenAI API: chat.completions.create(
-     model="gpt-3.5-turbo",
+     model="gpt-4o-mini",
      messages=[...],
-     max_tokens=500
+     max_tokens=1000
    )
    ↓
 9. Extract sources from chunks
@@ -290,66 +291,76 @@ CREATE TABLE messages (
 - ❌ Storage limit (1GB)
 - ❌ Vendor lock-in
 
-### AD-002: Embedding Model - text-embedding-3-small
+### AD-002: Embedding Model - text-embedding-3-small (512 dimensions)
 
-**Decision**: Use OpenAI's text-embedding-3-small model
+**Decision**: Use OpenAI's text-embedding-3-small model with reduced dimensions (512 instead of 1536)
 
 **Rationale**:
-- 1536 dimensions (good balance of quality/size)
+- 512 dimensions significantly reduces storage (3x smaller)
+- Still maintains good retrieval quality
 - Faster than larger models
 - Lower cost
-- Proven performance for RAG
+- Fits within Qdrant 1GB free tier for all FAR content
 
 **Alternatives Considered**:
 - text-embedding-3-large: Higher quality but slower, more expensive
 - text-embedding-ada-002: Older model, similar performance
+- Full 1536 dimensions: Better quality but exceeds storage limits
 
 **Trade-offs**:
 - ✅ Fast embedding generation
 - ✅ Lower API costs
-- ✅ Smaller storage footprint
+- ✅ Much smaller storage footprint (~512MB for all FAR)
+- ✅ Fits within free tier limits
+- ❌ Slightly lower quality than full 1536 dimensions
 - ❌ Slightly lower quality than large model
 
-### AD-003: Chunking Strategy - 800 chars with 150 overlap
+### AD-003: Chunking Strategy - 600 chars with 150 overlap
 
-**Decision**: Chunk documents into 800-character segments with 150-character overlap
+**Decision**: Chunk documents into 600-character segments with 150-character overlap
 
 **Rationale**:
 - Balances context preservation and granularity
+- Smaller chunks = better retrieval precision
 - Fits within OpenAI context window comfortably
 - Overlap ensures sentences aren't split awkwardly
-- Produces ~10,000-15,000 chunks for entire FAR
+- Optimized for storage efficiency within 1GB limit
 
 **Alternatives Considered**:
-- 1000 chars: Too large, loses precision
-- 500 chars: Too small, loses context
+- 800-1000 chars: Too large, loses precision
+- 400 chars: Too small, loses context
 - Sentence-based: Inconsistent chunk sizes
 
 **Trade-offs**:
-- ✅ Good retrieval precision
-- ✅ Reasonable storage usage
+- ✅ Better retrieval precision
+- ✅ Optimized storage usage
 - ✅ Preserves context across chunks
+- ✅ More granular search results
 - ❌ Some redundancy from overlap
+- ❌ More chunks to process
 
-### AD-004: LLM Model - GPT-3.5-turbo
+### AD-004: LLM Model - GPT-4o-mini
 
-**Decision**: Use GPT-3.5-turbo for answer generation (with GPT-4 fallback option)
+**Decision**: Use GPT-4o-mini for answer generation
 
 **Rationale**:
 - Fast response times (1-2 seconds)
 - Lower cost than GPT-4
-- Sufficient quality for FAR Q&A
-- Easy to upgrade to GPT-4 if needed
+- Better quality than GPT-3.5-turbo
+- Improved instruction following
+- Cost-effective for production use
 
 **Alternatives Considered**:
-- GPT-4: Higher quality but slower (3-5 seconds) and more expensive
+- GPT-3.5-turbo: Cheaper but lower quality
+- GPT-4: Higher quality but slower and more expensive
 - Open-source models: Hosting complexity, lower quality
 
 **Trade-offs**:
 - ✅ Fast responses
-- ✅ Lower costs
-- ✅ Good enough quality
-- ❌ Occasionally less accurate than GPT-4
+- ✅ Lower costs than full GPT-4
+- ✅ Better quality than GPT-3.5-turbo
+- ✅ Good instruction following
+- ❌ Slightly less accurate than GPT-4 full version
 
 ### AD-005: Frontend Framework - OpenAI ChatKit + Docusaurus
 

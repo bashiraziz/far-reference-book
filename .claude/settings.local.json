@@ -46,7 +46,16 @@
       "Bash(backend\\venv\\Scripts\\python -m uvicorn:*)",
       "Bash(timeout 120 cat:*)",
       "Bash(for i in 26 27 28 29 30)",
-      "Bash(timeout 120 python:*)"
+      "Bash(timeout 120 python:*)",
+      "Bash(venvScriptspython scriptspopulate_all_parts.py)",
+      "Bash(timeout 180 cat:*)",
+      "Bash(timeout 240 cat:*)",
+      "Bash(timeout 600 cat:*)",
+      "Bash(wc:*)",
+      "Bash(venvScriptspython scriptspopulate_parts_30_52.py)",
+      "Bash(venvScriptspython scriptstest_single_file_upload.py)",
+      "Bash(venvScriptspython scriptstest_chatbot_production.py)",
+      "Bash(find:*)"
     ],
     "deny": [],
     "ask": []
