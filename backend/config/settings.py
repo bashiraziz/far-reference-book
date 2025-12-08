@@ -26,7 +26,7 @@ class Settings(BaseSettings):
     # Qdrant Vector Store
     qdrant_url: str
     qdrant_api_key: str
-    qdrant_collection_name: str = "far_content"
+    qdrant_collection_name: str = "far_content_production"
 
     # RAG Settings
     embedding_model: str = "text-embedding-3-small"
