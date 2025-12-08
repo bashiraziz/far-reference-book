@@ -10,7 +10,7 @@ from datetime import datetime
 class Source(BaseModel):
     """Source citation for a message."""
     chunk_id: str  # Changed from UUID to str
-    chapter: int = Field(ge=1, le=3)
+    chapter: int = Field(ge=1, le=53)  # FAR has 53 parts
     section: str
     page: Optional[int] = None
     relevance_score: float = Field(ge=0.0, le=1.0)
