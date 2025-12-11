@@ -26,6 +26,12 @@ backend/.env.*
 .docusaurus
 .cache-loader
 
+# Data files (not tracked in repository)
+data/far/
+
+# Claude Code local settings
+.claude/settings.local.json
+
 # Misc
 .DS_Store
 .env.local
