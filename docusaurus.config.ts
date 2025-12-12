@@ -82,8 +82,21 @@ const config: Config = {
             },
           ],
         },
+        {
+          title: 'Community',
+          items: [
+            {
+              label: 'GitHub Repository',
+              href: 'https://github.com/bashir-aziz/far-reference-book',
+            },
+            {
+              label: 'Contact',
+              href: 'mailto:bashiraziz@gmail.com',
+            },
+          ],
+        },
       ],
-      copyright: `FAR Reference Book © ${new Date().getFullYear()}. Built with Docusaurus by Bashir Aziz.`,
+      copyright: `FAR Reference Book built with Docusaurus by Bashir Aziz and contribution from the community.`,
     },
     prism: {
       theme: prismThemes.github,

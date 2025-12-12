@@ -60,7 +60,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
         <div className="chat-header-content">
           <h3>FAR Assistant</h3>
           {!isMinimized && (
-            <p className="chat-subtitle">Ask questions about Federal Acquisition Regulations</p>
+            <p className="chat-subtitle">Ask Rowshni questions about Federal Acquisition Regulations and other FAR related topics</p>
           )}
         </div>
         <div className="chat-header-actions">
