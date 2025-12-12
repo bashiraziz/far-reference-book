@@ -137,11 +137,14 @@ def iter_document_chunks(docs_dir: Path, start_part: int = 1, end_part: int = 53
                 continue
 
             metadata = extract_metadata_from_path(md_file)
+            section = metadata["section"]
             for i, chunk in enumerate(
                 chunk_text_generator(content, INGEST_CHUNK_SIZE, INGEST_CHUNK_OVERLAP)
             ):
+                # Add section prefix to make section numbers prominent in embeddings
+                chunk_with_prefix = f"[FAR {section}] {chunk}"
                 yield {
-                    "text": chunk,
+                    "text": chunk_with_prefix,
                     "metadata": {
                         **metadata,
                         "chunk_index": i

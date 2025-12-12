@@ -7,11 +7,11 @@ slug: /
 
 # Federal Acquisition Regulation (FAR) Reference Book
 
-Welcome to the FAR Reference Book - your comprehensive guide to Federal Acquisition Regulations Parts 1-3.
+Welcome to the FAR Reference Book - your comprehensive guide to all 53 Parts of the Federal Acquisition Regulations.
 
 :::tip 💬 Try the AI-Powered FAR Assistant
 
-**Have a question about federal acquisition regulations?** Our intelligent chatbot can instantly search through all FAR Parts 1-3 to provide answers with precise citations.
+**Have a question about federal acquisition regulations?** Our intelligent chatbot can instantly search through all 53 FAR Parts to provide answers with precise citations.
 
 **Click the pulsing purple button in the bottom-right corner to start chatting!**
 
@@ -28,33 +28,7 @@ The Federal Acquisition Regulation (FAR) is the primary regulation for use by al
 
 ## Available Parts
 
-This reference book contains the following FAR Parts:
-
-### [Part 1 - Federal Acquisition Regulations System](/part-1/1.101)
-Establishes the Federal Acquisition Regulations System, including purpose, authority, applicability, and definitions.
-
-**Key Topics:**
-- Purpose and definitions
-- Responsible agencies
-- FAR deviations
-- Agency and public participation
-
-### [Part 2 - Definitions of Words and Terms](/part-2/2.101)
-Provides definitions for words and terms used throughout the FAR.
-
-**Key Topics:**
-- Definitions
-- Abbreviations and acronyms
-
-### [Part 3 - Improper Business Practices and Personal Conflicts of Interest](/part-3/3.101)
-Addresses policy and procedures for maintaining the integrity and impartiality of the acquisition process.
-
-**Key Topics:**
-- Gratuities and kickbacks
-- Anti-competitive practices
-- Reports of suspected violations
-- Contacts with industry
-- Whistleblower protections
+This reference book contains **all 53 FAR Parts**, providing complete coverage of federal acquisition regulations. Use the sidebar navigation to explore any part and its sections.
 
 ## How to Use This Reference
 

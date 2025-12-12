@@ -166,7 +166,7 @@ export const ChatButton: React.FC<ChatButtonProps> = ({ onClick, isOpen }) => {
 
 :::tip 💬 Try the AI-Powered FAR Assistant
 
-**Have a question about federal acquisition regulations?** Our intelligent chatbot can instantly search through all FAR Parts 1-3 to provide answers with precise citations.
+**Have a question about federal acquisition regulations?** Our intelligent chatbot can instantly search through all 53 FAR Parts to provide answers with precise citations.
 
 **Click the pulsing purple button in the bottom-right corner to start chatting!**
 

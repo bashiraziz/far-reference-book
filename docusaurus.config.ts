@@ -4,7 +4,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
   title: 'FAR Reference Book',
-  tagline: 'Federal Acquisition Regulations - Parts 1-3',
+  tagline: 'Federal Acquisition Regulations - All 53 Parts',
   favicon: 'img/favicon.ico',
 
   future: {

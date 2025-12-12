@@ -12,9 +12,11 @@ interface ChatWindowProps {
   isLoading: boolean;
   error: string | null;
   streamingMessageId: string | null;
+  isMinimized: boolean;
   onSendMessage: (content: string) => void;
   onRegenerateMessage: (messageId: string) => void;
   onClearConversation: () => void;
+  onMinimize: () => void;
   onClose: () => void;
 }
 
@@ -23,17 +25,24 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
   isLoading,
   error,
   streamingMessageId,
+  isMinimized,
   onSendMessage,
   onRegenerateMessage,
   onClearConversation,
+  onMinimize,
   onClose,
 }) => {
   const [inputValue, setInputValue] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const previousMessageCountRef = useRef(messages.length);
 
-  // Auto-scroll to bottom when new messages arrive
+  // Auto-scroll to bottom ONLY when new messages are added (not on mount)
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    // Only scroll if messages were actually added (not on initial load)
+    if (messages.length > previousMessageCountRef.current && messages.length > 0) {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+    previousMessageCountRef.current = messages.length;
   }, [messages]);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -45,12 +54,14 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
   };
 
   return (
-    <div className="chat-window">
+    <div className={`chat-window ${isMinimized ? 'chat-window-minimized' : ''}`}>
       {/* Header */}
       <div className="chat-header">
         <div className="chat-header-content">
           <h3>FAR Assistant</h3>
-          <p className="chat-subtitle">Ask questions about Federal Acquisition Regulations</p>
+          {!isMinimized && (
+            <p className="chat-subtitle">Ask questions about Federal Acquisition Regulations</p>
+          )}
         </div>
         <div className="chat-header-actions">
           <button
@@ -62,6 +73,19 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
               <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2" />
             </svg>
           </button>
+          <button
+            className="chat-header-btn"
+            onClick={onMinimize}
+            title={isMinimized ? "Expand chat" : "Minimize chat"}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              {isMinimized ? (
+                <path d="M18 15l-6-6-6 6" />
+              ) : (
+                <path d="M6 9l6 6 6-6" />
+              )}
+            </svg>
+          </button>
           <button className="chat-header-btn" onClick={onClose} title="Close chat">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M18 6L6 18M6 6l12 12" />
@@ -70,8 +94,9 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
         </div>
       </div>
 
-      {/* Messages */}
-      <div className="chat-messages">
+      {/* Messages - hide when minimized */}
+      {!isMinimized && (
+        <div className="chat-messages">
         {messages.length === 0 ? (
           <div className="chat-welcome">
             <div className="chat-welcome-header">
@@ -184,10 +209,12 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
           </div>
         )}
         <div ref={messagesEndRef} />
-      </div>
+        </div>
+      )}
 
-      {/* Input */}
-      <form className="chat-input-form" onSubmit={handleSubmit}>
+      {/* Input - hide when minimized */}
+      {!isMinimized && (
+        <form className="chat-input-form" onSubmit={handleSubmit}>
         <input
           type="text"
           className="chat-input"
@@ -205,7 +232,8 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
             <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
           </svg>
         </button>
-      </form>
+        </form>
+      )}
     </div>
   );
 };

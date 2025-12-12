@@ -12,6 +12,7 @@ import './ChatWidget.css';
 
 export const ChatWidget: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(false);
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -148,9 +149,11 @@ export const ChatWidget: React.FC = () => {
           isLoading={isLoading}
           error={error}
           streamingMessageId={streamingMessageId}
+          isMinimized={isMinimized}
           onSendMessage={handleSendMessage}
           onRegenerateMessage={handleRegenerateMessage}
           onClearConversation={handleClearConversation}
+          onMinimize={() => setIsMinimized(!isMinimized)}
           onClose={() => setIsOpen(false)}
         />
       )}

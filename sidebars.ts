@@ -2,7 +2,7 @@ import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
 
 /**
  * FAR Reference Book Sidebar Configuration
- * Auto-generates sidebars for all FAR Parts 1-25
+ * Auto-generates sidebars for all FAR Parts 1-53
  */
 const sidebars: SidebarsConfig = {
   tutorialSidebar: [

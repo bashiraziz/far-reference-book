@@ -135,6 +135,9 @@ class RAGService:
             # Support both 'text' and 'content' field names for backward compatibility
             text_content = payload.get('text') or payload.get('content', '')
 
+            # Strip [FAR X.XXX] prefix for cleaner display (section already shown in citation)
+            text_content = re.sub(r'^\[FAR [^\]]+\]\s*', '', text_content)
+
             # Support different metadata field names
             section_info = payload.get('section') or payload.get('file', 'Unknown')
 
