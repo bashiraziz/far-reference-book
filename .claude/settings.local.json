@@ -55,7 +55,13 @@
       "Bash(venvScriptspython scriptspopulate_parts_30_52.py)",
       "Bash(venvScriptspython scriptstest_single_file_upload.py)",
       "Bash(venvScriptspython scriptstest_chatbot_production.py)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(ls:*)",
+      "WebFetch(domain:github.com)",
+      "WebSearch",
+      "WebFetch(domain:www.eesel.ai)",
+      "WebFetch(domain:platform.openai.com)",
+      "Bash(npm run build:*)"
     ],
     "deny": [],
     "ask": []
