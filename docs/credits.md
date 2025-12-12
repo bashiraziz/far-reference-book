@@ -40,7 +40,3 @@ This project stands on the shoulders of many open-source technologies:
 ## Data Source
 
 All Federal Acquisition Regulation content is sourced from the official [Acquisition.gov FAR database](https://www.acquisition.gov/browse/index/far), maintained by the U.S. General Services Administration.
-
----
-
-*Built with dedication to making federal acquisition regulations accessible to everyone.*
