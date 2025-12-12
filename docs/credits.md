@@ -10,9 +10,11 @@ sidebar_label: Credits
 
 This FAR Reference Book was built entirely through AI-assisted development using **[Claude](https://claude.ai/)** by Anthropic. All coding, implementation, and technical architecture were developed by Claude AI working collaboratively with the project creator.
 
+This is an open-source project. Visit our **[GitHub repository](https://github.com/bashiraziz/far-reference-book)** to explore the code and learn more.
+
 ### Development Framework
 
-The project leverages **[SpecKit](https://github.com/anthropics/speckit)**, a specification-driven development framework that enables structured collaboration between humans and AI agents. SpecKit's systematic approach to software development was instrumental in creating this comprehensive reference tool.
+The project leverages **[SpecKit](https://github.com/github/spec-kit)**, a specification-driven development framework that enables structured collaboration between humans and AI agents. SpecKit's systematic approach to software development was instrumental in creating this comprehensive reference tool.
 
 ## Special Thanks
 
@@ -38,10 +40,6 @@ This project stands on the shoulders of many open-source technologies:
 ## Data Source
 
 All Federal Acquisition Regulation content is sourced from the official [Acquisition.gov FAR database](https://www.acquisition.gov/browse/index/far), maintained by the U.S. General Services Administration.
-
-## Contributing
-
-This project is open source and welcomes contributions from the community. Visit our [GitHub repository](https://github.com/bashiraziz/far-reference-book) to get involved.
 
 ---
 
