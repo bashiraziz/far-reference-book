@@ -64,6 +64,11 @@ const config: Config = {
       },
       items: [
         {
+          to: '/credits',
+          label: 'Credits',
+          position: 'left',
+        },
+        {
           href: 'https://github.com/bashiraziz/far-reference-book.git',
           label: 'GitHub',
           position: 'right',
