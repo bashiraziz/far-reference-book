@@ -37,6 +37,27 @@ This reference book contains **all 53 FAR Parts**, providing complete coverage o
 - **Search**: Use the search bar (top right) to find specific regulations, keywords, or topics
 - **Cross-References**: Click on section references (e.g., [1.301](./part-1/1.301.md)) to navigate between related sections
 
+## Technology Stack
+
+This application is built with modern, scalable technologies:
+
+### Frontend
+- **[Docusaurus](https://docusaurus.io/)** - Static site generator for documentation
+- **React 19** - UI component library with TypeScript
+- **MDX** - Enhanced markdown with React components
+
+### Backend & AI
+- **[FastAPI](https://fastapi.tiangolo.com/)** - High-performance Python web framework
+- **[Qdrant](https://qdrant.tech/)** - Vector database for semantic search and RAG (Retrieval-Augmented Generation)
+- **[Neon](https://neon.tech/)** - Serverless PostgreSQL for conversation storage
+- **[OpenAI](https://openai.com/)** - Embeddings and language model for intelligent responses
+
+### Infrastructure
+- **[Railway](https://railway.app/)** - Cloud hosting platform for backend API
+- **GitHub Pages** - Static site hosting for documentation
+
+The AI assistant uses RAG technology to search through vector embeddings of all 53 FAR parts, retrieving relevant context and generating accurate answers with precise citations.
+
 ---
 
 **Note**: This is an educational resource. For official regulatory guidance, always consult the official FAR at [acquisition.gov](https://www.acquisition.gov/browse/index/far).
