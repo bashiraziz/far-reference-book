@@ -5,9 +5,7 @@ sidebar_label: Introduction
 slug: /
 ---
 
-import { HeroSection } from '@site/src/components/HeroSection';
-
-<HeroSection />
+# Federal Acquisition Regulation (FAR) Reference Book
 
 :::caution ⚠️ Important: This is NOT an Official FAR Website
 
