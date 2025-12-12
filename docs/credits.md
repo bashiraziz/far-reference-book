@@ -35,7 +35,7 @@ This project stands on the shoulders of many open-source technologies:
 - **[FastAPI](https://fastapi.tiangolo.com/)** - Modern Python web framework
 - **[Qdrant](https://qdrant.tech/)** - Vector database for AI-powered search
 - **[Neon](https://neon.tech/)** - Serverless PostgreSQL
-- **[OpenAI](https://openai.com/)** - AI models and embeddings
+- **[Google Gemini](https://ai.google.dev/)** - AI models for embeddings and chat completions
 
 ## Data Source
 

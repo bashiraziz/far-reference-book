@@ -60,7 +60,7 @@ This application is built with modern, scalable technologies:
 - **[FastAPI](https://fastapi.tiangolo.com/)** - High-performance Python web framework
 - **[Qdrant](https://qdrant.tech/)** - Vector database for semantic search and RAG (Retrieval-Augmented Generation)
 - **[Neon](https://neon.tech/)** - Serverless PostgreSQL for conversation storage
-- **[OpenAI](https://openai.com/)** - Embeddings and language model for intelligent responses
+- **[Google Gemini](https://ai.google.dev/)** - Advanced AI model for embeddings and intelligent responses (free tier available)
 
 ### Infrastructure
 - **[Railway](https://railway.app/)** - Cloud hosting platform for backend API
