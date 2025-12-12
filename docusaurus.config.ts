@@ -87,11 +87,11 @@ const config: Config = {
           items: [
             {
               label: 'GitHub Repository',
-              href: 'https://github.com/bashir-aziz/far-reference-book',
+              href: 'https://github.com/bashiraziz/far-reference-book',
             },
             {
-              label: 'Contact',
-              href: 'mailto:bashiraziz@gmail.com',
+              label: 'bashiraziz@gmail.com',
+              href: '#',
             },
           ],
         },
