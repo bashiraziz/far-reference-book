@@ -102,8 +102,9 @@
 .table-of-contents__link {
   padding: 0.4rem 0.6rem;
   display: block;
-  border-left: 2px solid var(--ifm-color-emphasis-300);
+  border-left: 2px solid transparent;
   transition: all 0.2s ease;
+  margin-left: 0;
 }
 
 .table-of-contents__link:hover {
@@ -120,6 +121,12 @@
 
 .table-of-contents li {
   margin: 0.3rem 0;
+  list-style: none;
+}
+
+.table-of-contents ul {
+  padding-left: 0;
+  margin: 0;
 }
 
 /* Sidebar improvements */
