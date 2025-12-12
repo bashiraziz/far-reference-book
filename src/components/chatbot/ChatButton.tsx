@@ -36,7 +36,7 @@ export const ChatButton: React.FC<ChatButtonProps> = ({ onClick, isOpen }) => {
             <line x1="6" y1="6" x2="18" y2="18" />
           </svg>
         ) : (
-          // Chat icon
+          // Sparkles icon
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -48,7 +48,15 @@ export const ChatButton: React.FC<ChatButtonProps> = ({ onClick, isOpen }) => {
             strokeLinecap="round"
             strokeLinejoin="round"
           >
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+            <path d="M12 3v3" />
+            <path d="M12 18v3" />
+            <path d="M3 12h3" />
+            <path d="M18 12h3" />
+            <path d="m19 19-2.5-2.5" />
+            <path d="m5 5 2.5 2.5" />
+            <path d="M19 5l-2.5 2.5" />
+            <path d="M5 19l2.5-2.5" />
+            <circle cx="12" cy="12" r="3" />
           </svg>
         )}
       </button>
