@@ -80,12 +80,40 @@
 
 @media (max-width: 768px) {
   .chat-button {
-    width: 56px;
-    height: 56px;
+    width: 60px;  /* Maintain 60px for proper touch target */
+    height: 60px;
+  }
+
+  .chat-button-label {
+    font-size: 13px;
+    padding: 8px 14px;
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Improved touch feedback on mobile */
+  .chat-button:active {
+    transform: scale(0.92);
+  }
+
+  /* Better animation performance on mobile */
+  @media (prefers-reduced-motion: no-preference) {
+    .chat-button {
+      will-change: transform;
+    }
+  }
+}
+
+/* Extra small devices (phones in portrait) */
+@media (max-width: 480px) {
+  .chat-button-container {
+    gap: 8px;
   }
 
   .chat-button-label {
     font-size: 12px;
     padding: 6px 12px;
+    max-width: 150px;
   }
 }

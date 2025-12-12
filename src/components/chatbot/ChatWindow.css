@@ -328,9 +328,17 @@
 
 @media (max-width: 768px) {
   .chat-window {
-    width: calc(100vw - 32px);
-    height: calc(100vh - 140px);
-    right: 16px;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh; /* Dynamic viewport height for better mobile support */
+    right: 0;
+    bottom: 0;
+    border-radius: 0;
+    max-height: none;
+  }
+
+  .chat-window-minimized {
+    bottom: 0;
   }
 
   /* Mobile welcome screen adjustments */
@@ -352,5 +360,82 @@
 
   .chat-welcome-stat-label {
     font-size: 10px;
+  }
+
+  /* Improved input area for mobile keyboards */
+  .chat-input-form {
+    padding: 14px;
+    gap: 8px;
+  }
+
+  .chat-input {
+    font-size: 16px; /* Prevents zoom on iOS */
+    padding: 12px 14px;
+    min-height: 44px; /* Better touch target */
+  }
+
+  .chat-send-btn {
+    width: 44px;  /* Proper touch target */
+    height: 44px;
+    min-width: 44px; /* Ensure it doesn't shrink */
+  }
+
+  .chat-send-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* Better header button sizes on mobile */
+  .chat-header-btn {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+  }
+
+  /* Improved message padding on mobile */
+  .chat-messages {
+    padding: 14px;
+  }
+}
+
+/* Extra small devices - portrait phones */
+@media (max-width: 480px) {
+  .chat-header {
+    padding: 14px;
+  }
+
+  .chat-header-content h3 {
+    font-size: 15px;
+  }
+
+  .chat-subtitle {
+    font-size: 11px;
+  }
+
+  /* Ensure messages are readable on small screens */
+  .message-content {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .chat-welcome-card {
+    font-size: 12px;
+  }
+}
+
+/* Landscape mode on mobile */
+@media (max-height: 500px) and (max-width: 996px) {
+  .chat-window {
+    height: 100vh;
+  }
+
+  .chat-welcome-header {
+    padding: 8px 12px 0;
+    margin-bottom: 12px;
+  }
+
+  .chat-welcome-icon {
+    width: 40px;
+    height: 40px;
   }
 }

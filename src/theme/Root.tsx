@@ -6,7 +6,6 @@
 
 import React from 'react';
 import { ChatWidget } from '../components/chatbot/ChatWidget';
-import { ColorSchemeSwitcher } from '../components/ColorSchemeSwitcher';
 
 interface RootProps {
   children: React.ReactNode;
@@ -17,7 +16,6 @@ export default function Root({ children }: RootProps): JSX.Element {
     <>
       {children}
       <ChatWidget />
-      <ColorSchemeSwitcher />
     </>
   );
 }

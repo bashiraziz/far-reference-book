@@ -3,7 +3,6 @@
  * bundles Infima by default. Infima is a CSS framework designed to
  * work well for content-centric websites.
  */
- /* Test comment: Remove me if you want to customize this file! */
 
 /* You can override the default Infima variables here. */
 :root {
@@ -16,6 +15,10 @@
   --ifm-color-primary-lightest: #3cad6e;
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+
+  /* Improved typography for better readability */
+  --ifm-line-height-base: 1.7;
+  --ifm-paragraph-margin-bottom: 1.2rem;
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
@@ -28,4 +31,49 @@
   --ifm-color-primary-lighter: #32d8b4;
   --ifm-color-primary-lightest: #4fddbf;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+
+/* Mobile optimizations */
+@media (max-width: 996px) {
+  /* Better touch targets for mobile */
+  .navbar__item,
+  .menu__link,
+  .pagination-nav__link {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Improved sidebar for mobile */
+  .menu {
+    padding: 0.5rem;
+  }
+
+  .menu__link {
+    padding: 0.7rem 1rem;
+    font-size: 15px;
+  }
+
+  /* Better spacing for content on mobile */
+  article {
+    padding: 1rem;
+  }
+
+  /* Improved heading sizes for mobile */
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  h3 {
+    font-size: 1.3rem;
+  }
+
+  /* Better paragraph spacing on mobile */
+  p {
+    margin-bottom: 1rem;
+  }
 }
