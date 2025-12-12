@@ -1,14 +1,14 @@
 """
 RAG (Retrieval-Augmented Generation) service for FAR chatbot.
 
-Handles semantic search, context formatting, and OpenAI response generation.
+Handles semantic search, context formatting, and Gemini response generation.
 """
 
 from typing import List, Dict, Any, Optional
 import time
 import re
 
-from openai import OpenAI
+import google.generativeai as genai
 
 from backend.services.vector_store import VectorStoreService
 from backend.services.embeddings import EmbeddingsService
@@ -22,9 +22,9 @@ class RAGService:
     FALLBACK_SCORE_THRESHOLD = 0.0  # Used when initial search returns nothing
 
     @classmethod
-    def get_openai_client(cls) -> OpenAI:
-        """Get OpenAI client instance."""
-        return OpenAI(api_key=settings.openai_api_key)
+    def _configure_gemini(cls):
+        """Configure Gemini API."""
+        genai.configure(api_key=settings.gemini_api_key)
 
     @classmethod
     def retrieve_context(
@@ -157,7 +157,7 @@ class RAGService:
         selected_text: Optional[str] = None
     ) -> Dict[str, Any]:
         """
-        Generate AI response using OpenAI Chat Completions API.
+        Generate AI response using Google Gemini API.
 
         Args:
             query: User's question
@@ -169,9 +169,10 @@ class RAGService:
             Dictionary with response, sources, and metadata
         """
         start_time = time.time()
+        cls._configure_gemini()
 
-        # Build system message
-        system_message = """You are an expert AI assistant specializing in the Federal Acquisition Regulation (FAR).
+        # Build system instruction
+        system_instruction = """You are an expert AI assistant specializing in the Federal Acquisition Regulation (FAR).
 
 Your role is to:
 1. Answer questions accurately based on the provided FAR content
@@ -198,33 +199,38 @@ Guidelines:
 
         user_message = "\n".join(user_parts)
 
-        # Build messages array
-        messages = [{"role": "system", "content": system_message}]
+        # Create Gemini model with system instruction
+        model = genai.GenerativeModel(
+            model_name=settings.chat_model,
+            system_instruction=system_instruction
+        )
 
-        # Add conversation history if provided
+        # Build chat history for Gemini
+        chat_history = []
         if conversation_history:
             for msg in conversation_history[-6:]:  # Last 3 exchanges
-                messages.append({
-                    "role": msg["role"],
-                    "content": msg["content"]
+                role = "user" if msg["role"] == "user" else "model"
+                chat_history.append({
+                    "role": role,
+                    "parts": [msg["content"]]
                 })
 
-        # Add current query
-        messages.append({"role": "user", "content": user_message})
+        # Start chat with history
+        chat = model.start_chat(history=chat_history)
 
-        # Call OpenAI API
-        client = cls.get_openai_client()
-
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=messages,
-            temperature=0.7,
-            max_tokens=1000
+        # Send message and get response
+        response = chat.send_message(
+            user_message,
+            generation_config=genai.GenerationConfig(
+                temperature=0.7,
+                max_output_tokens=1000
+            )
         )
 
         # Extract response
-        assistant_message = response.choices[0].message.content
-        token_count = response.usage.total_tokens
+        assistant_message = response.text
+        # Gemini doesn't provide token counts in the same way, estimate from text
+        token_count = len(assistant_message.split())  # Rough estimate
 
         processing_time_ms = int((time.time() - start_time) * 1000)
 

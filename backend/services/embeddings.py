@@ -1,11 +1,11 @@
 """
 Embeddings service for generating vector representations of text.
 
-Uses OpenAI's text-embedding-3-small model.
+Uses Google's Gemini text-embedding-004 model.
 """
 
 from typing import List
-from openai import OpenAI
+import google.generativeai as genai
 from backend.config.settings import settings
 from backend.config.logging import logger
 
@@ -14,14 +14,14 @@ class EmbeddingsService:
     """Handles text embedding generation."""
 
     @classmethod
-    def get_openai_client(cls) -> OpenAI:
-        """Get OpenAI client instance."""
-        return OpenAI(api_key=settings.openai_api_key)
+    def _configure_gemini(cls):
+        """Configure Gemini API."""
+        genai.configure(api_key=settings.gemini_api_key)
 
     @classmethod
     def generate_embedding(cls, text: str) -> List[float]:
         """
-        Generate embedding vector for a single text.
+        Generate embedding vector for a single text using Gemini.
 
         Args:
             text: Text to embed
@@ -29,20 +29,20 @@ class EmbeddingsService:
         Returns:
             List of floats representing the embedding vector
         """
-        client = cls.get_openai_client()
+        cls._configure_gemini()
 
-        response = client.embeddings.create(
+        result = genai.embed_content(
             model=settings.embedding_model,
-            input=text,
-            dimensions=settings.embedding_dimensions
+            content=text,
+            task_type="retrieval_document"
         )
 
-        return response.data[0].embedding
+        return result['embedding']
 
     @classmethod
     def generate_embeddings_batch(cls, texts: List[str]) -> List[List[float]]:
         """
-        Generate embeddings for multiple texts in a single API call.
+        Generate embeddings for multiple texts.
 
         Args:
             texts: List of texts to embed
@@ -53,14 +53,17 @@ class EmbeddingsService:
         if not texts:
             return []
 
-        client = cls.get_openai_client()
+        cls._configure_gemini()
 
-        response = client.embeddings.create(
-            model=settings.embedding_model,
-            input=texts,
-            dimensions=settings.embedding_dimensions
-        )
+        embeddings = []
+        # Gemini API doesn't support batch embeddings in the same way,
+        # so we process them one by one
+        for text in texts:
+            result = genai.embed_content(
+                model=settings.embedding_model,
+                content=text,
+                task_type="retrieval_document"
+            )
+            embeddings.append(result['embedding'])
 
-        # Sort by index to ensure correct order
-        embeddings = sorted(response.data, key=lambda x: x.index)
-        return [item.embedding for item in embeddings]
+        return embeddings

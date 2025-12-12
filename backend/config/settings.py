@@ -20,8 +20,8 @@ class Settings(BaseSettings):
     # Database
     neon_database_url: str
 
-    # OpenAI
-    openai_api_key: str
+    # Google Gemini AI
+    gemini_api_key: str
 
     # Qdrant Vector Store
     qdrant_url: str
@@ -29,8 +29,9 @@ class Settings(BaseSettings):
     qdrant_collection_name: str = "far_content_production"
 
     # RAG Settings
-    embedding_model: str = "text-embedding-3-small"
-    embedding_dimensions: int = 512  # Optimized for ~512MB storage
+    embedding_model: str = "models/text-embedding-004"  # Gemini embedding model
+    embedding_dimensions: int = 768  # Gemini embedding dimensions
+    chat_model: str = "gemini-2.0-flash-exp"  # Gemini chat model (fast and free)
     max_chunk_retrieval: int = 5
     chunk_size: int = 600  # Optimized for better context while staying under 700MB
     chunk_overlap: int = 150  # Proportional overlap (25%)
