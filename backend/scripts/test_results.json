@@ -1,0 +1,12 @@
+{
+  "timestamp": "2025-12-11 21:24:01",
+  "collection": "far_content_production",
+  "tests": {
+    "Qdrant Connection": true,
+    "Vector Search": true,
+    "Sample Queries": false,
+    "Performance": false,
+    "Edge Cases": true
+  },
+  "overall_pass": false
+}

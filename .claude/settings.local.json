@@ -61,7 +61,8 @@
       "WebSearch",
       "WebFetch(domain:www.eesel.ai)",
       "WebFetch(domain:platform.openai.com)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(rm:*)"
     ],
     "deny": [],
     "ask": []

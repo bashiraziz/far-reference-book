@@ -7,6 +7,16 @@ slug: /
 
 # Federal Acquisition Regulation (FAR) Reference Book
 
+:::caution ⚠️ Important: This is NOT an Official FAR Website
+
+**This is an independent, open-source educational resource** created to make FAR content more accessible. While we strive for accuracy, this site should not be used as a substitute for official FAR documentation.
+
+**For official FAR information and regulatory guidance, always consult:** [acquisition.gov](https://www.acquisition.gov/browse/index/far)
+
+Always verify information with official sources and qualified legal counsel for matters related to federal acquisition and contracting.
+
+:::
+
 Welcome to the FAR Reference Book - your comprehensive guide to all 53 Parts of the Federal Acquisition Regulations.
 
 :::tip 💬 Try the AI-Powered FAR Assistant
@@ -57,7 +67,3 @@ This application is built with modern, scalable technologies:
 - **GitHub Pages** - Static site hosting for documentation
 
 The AI assistant uses RAG technology to search through vector embeddings of all 53 FAR parts, retrieving relevant context and generating accurate answers with precise citations.
-
----
-
-**Note**: This is an educational resource. For official regulatory guidance, always consult the official FAR at [acquisition.gov](https://www.acquisition.gov/browse/index/far).
