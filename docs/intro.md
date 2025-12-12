@@ -5,7 +5,9 @@ sidebar_label: Introduction
 slug: /
 ---
 
-# Federal Acquisition Regulation (FAR) Reference Book
+import { HeroSection } from '@site/src/components/HeroSection';
+
+<HeroSection />
 
 :::caution ⚠️ Important: This is NOT an Official FAR Website
 
