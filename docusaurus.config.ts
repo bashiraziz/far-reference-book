@@ -42,6 +42,9 @@ const config: Config = {
         docs: {
           routeBasePath: '/', // Serve docs at the root
           sidebarPath: './sidebars.ts',
+          breadcrumbs: true,  // Enable breadcrumb navigation
+          showLastUpdateTime: true,  // Show last update timestamp
+          showLastUpdateAuthor: false,  // Don't show author (not needed for this project)
         },
         blog: false, // Disable blog
         theme: {
@@ -53,6 +56,16 @@ const config: Config = {
 
   themeConfig: {
     image: 'img/docusaurus-social-card.jpg',
+    docs: {
+      sidebar: {
+        hideable: true,  // Allow hiding sidebar for more reading space
+        autoCollapseCategories: true,  // Auto-collapse other categories when one is opened
+      },
+    },
+    tableOfContents: {
+      minHeadingLevel: 2,  // Start TOC from h2
+      maxHeadingLevel: 4,  // End TOC at h4
+    },
     colorMode: {
       respectPrefersColorScheme: true,
     },

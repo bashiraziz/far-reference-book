@@ -77,3 +77,72 @@
     margin-bottom: 1rem;
   }
 }
+
+/* Breadcrumb styling */
+.breadcrumbs {
+  margin-bottom: 1.5rem;
+  padding: 0.75rem 0;
+  font-size: 0.9rem;
+}
+
+.breadcrumbs__link {
+  transition: color 0.2s ease;
+}
+
+.breadcrumbs__link:hover {
+  background: var(--ifm-color-emphasis-200);
+  border-radius: 4px;
+}
+
+/* Table of Contents styling */
+.table-of-contents {
+  font-size: 0.9rem;
+}
+
+.table-of-contents__link {
+  padding: 0.4rem 0.6rem;
+  display: block;
+  border-left: 2px solid var(--ifm-color-emphasis-300);
+  transition: all 0.2s ease;
+}
+
+.table-of-contents__link:hover {
+  border-left-color: var(--ifm-color-primary);
+  background: var(--ifm-color-emphasis-100);
+  color: var(--ifm-color-primary);
+}
+
+.table-of-contents__link--active {
+  border-left-color: var(--ifm-color-primary);
+  color: var(--ifm-color-primary);
+  font-weight: 600;
+}
+
+.table-of-contents li {
+  margin: 0.3rem 0;
+}
+
+/* Sidebar improvements */
+.theme-doc-sidebar-container {
+  border-right: 1px solid var(--ifm-color-emphasis-200);
+}
+
+/* Improve menu category styling */
+.menu__list-item--collapsed .menu__link--sublist:after,
+.menu__list-item--expanded .menu__link--sublist:after {
+  background-size: 1.25rem 1.25rem;
+  filter: var(--ifm-menu-link-sublist-icon-filter);
+}
+
+/* Make active menu item more visible */
+.menu__link--active {
+  font-weight: 600;
+  border-left: 3px solid var(--ifm-color-primary);
+  padding-left: calc(1rem - 3px);
+}
+
+/* Better hover state for sidebar items */
+.menu__link:hover {
+  background: var(--ifm-color-emphasis-100);
+  transition: background 0.2s ease;
+}
