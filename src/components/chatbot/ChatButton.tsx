@@ -36,27 +36,17 @@ export const ChatButton: React.FC<ChatButtonProps> = ({ onClick, isOpen }) => {
             <line x1="6" y1="6" x2="18" y2="18" />
           </svg>
         ) : (
-          // Sparkles icon
+          // Modern AI Sparkles icon
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
             height="24"
             viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+            fill="currentColor"
           >
-            <path d="M12 3v3" />
-            <path d="M12 18v3" />
-            <path d="M3 12h3" />
-            <path d="M18 12h3" />
-            <path d="m19 19-2.5-2.5" />
-            <path d="m5 5 2.5 2.5" />
-            <path d="M19 5l-2.5 2.5" />
-            <path d="M5 19l2.5-2.5" />
-            <circle cx="12" cy="12" r="3" />
+            <path d="M12 0.5L13.5 6.5L19.5 8L13.5 9.5L12 15.5L10.5 9.5L4.5 8L10.5 6.5L12 0.5Z" />
+            <path d="M19 14L19.75 16.25L22 17L19.75 17.75L19 20L18.25 17.75L16 17L18.25 16.25L19 14Z" />
+            <path d="M7 17L7.5 18.5L9 19L7.5 19.5L7 21L6.5 19.5L5 19L6.5 18.5L7 17Z" />
           </svg>
         )}
       </button>
