@@ -54,23 +54,6 @@ const config: Config = {
     ],
   ],
 
-  themes: [
-    [
-      '@easyops-cn/docusaurus-search-local',
-      {
-        hashed: true,
-        language: ['en'],
-        highlightSearchTermsOnTargetPage: true,
-        explicitSearchResultPath: true,
-        indexDocs: true,
-        indexBlog: false,
-        docsRouteBasePath: '/',
-        searchResultLimits: 8,
-        searchResultContextMaxLength: 50,
-      },
-    ],
-  ],
-
   themeConfig: {
     image: 'img/docusaurus-social-card.jpg',
     docs: {
