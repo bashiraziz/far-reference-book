@@ -69,6 +69,11 @@ const config: Config = {
           position: 'left',
         },
         {
+          to: '/part-1/1.000',
+          label: 'FAR Parts',
+          position: 'left',
+        },
+        {
           href: 'https://github.com/bashiraziz/far-reference-book.git',
           label: 'GitHub',
           position: 'right',
