@@ -1,0 +1,69 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#764ba2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f093fb;stop-opacity:0.8" />
+    </linearGradient>
+
+    <!-- Sparkles gradient -->
+    <linearGradient id="sparkleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ffd700;stop-opacity:0.9" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGradient)"/>
+
+  <!-- Decorative circles -->
+  <circle cx="100" cy="100" r="80" fill="white" opacity="0.1"/>
+  <circle cx="1100" cy="530" r="100" fill="white" opacity="0.1"/>
+
+  <!-- Main content container -->
+  <rect x="60" y="60" width="1080" height="510" fill="white" rx="20" opacity="0.95"/>
+
+  <!-- Sparkle icon (top left) -->
+  <g transform="translate(120, 120)">
+    <path d="M20 0L23 10L33 13L23 16L20 26L17 16L7 13L17 10L20 0Z" fill="url(#sparkleGradient)"/>
+    <path d="M38 23L39.5 27.5L44 29L39.5 30.5L38 35L36.5 30.5L32 29L36.5 27.5L38 23Z" fill="url(#sparkleGradient)" opacity="0.8"/>
+    <path d="M10 28L11 31L14 32L11 33L10 36L9 33L6 32L9 31L10 28Z" fill="url(#sparkleGradient)" opacity="0.6"/>
+  </g>
+
+  <!-- Title -->
+  <text x="600" y="220" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="800" fill="#1a202c" text-anchor="middle">
+    FAR Reference Book
+  </text>
+
+  <!-- Subtitle -->
+  <text x="600" y="280" font-family="system-ui, -apple-system, sans-serif" font-size="32" fill="#4a5568" text-anchor="middle">
+    Federal Acquisition Regulations
+  </text>
+
+  <!-- Feature badges -->
+  <g transform="translate(600, 360)">
+    <!-- Badge 1: 53 Parts -->
+    <rect x="-300" y="0" width="180" height="60" fill="#667eea" rx="10"/>
+    <text x="-210" y="40" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="700" fill="white" text-anchor="middle">
+      53 Parts
+    </text>
+
+    <!-- Badge 2: AI-Powered -->
+    <rect x="-90" y="0" width="200" height="60" fill="#764ba2" rx="10"/>
+    <text x="10" y="40" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="700" fill="white" text-anchor="middle">
+      AI-Powered
+    </text>
+
+    <!-- Badge 3: Free -->
+    <rect x="140" y="0" width="140" height="60" fill="#10b981" rx="10"/>
+    <text x="210" y="40" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="700" fill="white" text-anchor="middle">
+      Free
+    </text>
+  </g>
+
+  <!-- URL -->
+  <text x="600" y="500" font-family="system-ui, -apple-system, sans-serif" font-size="24" fill="#718096" text-anchor="middle">
+    bashiraziz.github.io/far-reference-book
+  </text>
+</svg>

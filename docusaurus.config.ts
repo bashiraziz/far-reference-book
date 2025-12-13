@@ -55,7 +55,7 @@ const config: Config = {
   ],
 
   themeConfig: {
-    image: 'img/docusaurus-social-card.jpg',
+    image: 'img/social-card.svg',
     docs: {
       sidebar: {
         hideable: true,  // Allow hiding sidebar for more reading space
