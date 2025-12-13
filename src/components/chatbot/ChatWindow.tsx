@@ -1,5 +1,5 @@
 /**
- * ChatWindow - Main chat interface UI.
+ * ChatWindow - Main chat interface UI with voice capabilities.
  */
 
 import React, { useState, useRef, useEffect } from 'react';
@@ -20,6 +20,13 @@ interface ChatWindowProps {
   onClose: () => void;
 }
 
+// Check browser support for voice features
+const isSpeechRecognitionSupported = typeof window !== 'undefined' &&
+  ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window);
+
+const isSpeechSynthesisSupported = typeof window !== 'undefined' &&
+  'speechSynthesis' in window;
+
 export const ChatWindow: React.FC<ChatWindowProps> = ({
   messages,
   isLoading,
@@ -33,8 +40,12 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
   onClose,
 }) => {
   const [inputValue, setInputValue] = useState('');
+  const [isListening, setIsListening] = useState(false);
+  const [voiceOutputEnabled, setVoiceOutputEnabled] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const previousMessageCountRef = useRef(messages.length);
+  const recognitionRef = useRef<any>(null);
+  const lastSpokenMessageIdRef = useRef<string | null>(null);
 
   // Auto-scroll to bottom ONLY when new messages are added (not on mount)
   useEffect(() => {
@@ -53,6 +64,93 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
     }
   };
 
+  // Voice Input: Speech Recognition
+  const startListening = () => {
+    if (!isSpeechRecognitionSupported) {
+      alert('Speech recognition is not supported in your browser.');
+      return;
+    }
+
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => {
+      setIsListening(true);
+    };
+
+    recognition.onresult = (event: any) => {
+      const transcript = event.results[0][0].transcript;
+      setInputValue(transcript);
+      setIsListening(false);
+    };
+
+    recognition.onerror = (event: any) => {
+      console.error('Speech recognition error:', event.error);
+      setIsListening(false);
+      if (event.error !== 'no-speech' && event.error !== 'aborted') {
+        alert(`Voice input error: ${event.error}`);
+      }
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    recognitionRef.current = recognition;
+    recognition.start();
+  };
+
+  const stopListening = () => {
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
+      setIsListening(false);
+    }
+  };
+
+  // Voice Output: Read assistant responses aloud
+  useEffect(() => {
+    if (!voiceOutputEnabled || !isSpeechSynthesisSupported) return;
+
+    // Find the latest assistant message
+    const assistantMessages = messages.filter(m => m.role === 'assistant');
+    const latestAssistantMessage = assistantMessages[assistantMessages.length - 1];
+
+    // Only speak if it's a new message we haven't spoken yet
+    if (latestAssistantMessage &&
+        latestAssistantMessage.id !== lastSpokenMessageIdRef.current &&
+        !streamingMessageId) { // Don't speak while streaming
+
+      lastSpokenMessageIdRef.current = latestAssistantMessage.id;
+
+      // Stop any ongoing speech
+      window.speechSynthesis.cancel();
+
+      // Speak the new message
+      const utterance = new SpeechSynthesisUtterance(latestAssistantMessage.content);
+      utterance.rate = 1.0;
+      utterance.pitch = 1;
+      utterance.volume = 1;
+
+      window.speechSynthesis.speak(utterance);
+    }
+  }, [messages, voiceOutputEnabled, streamingMessageId]);
+
+  // Cleanup speech on unmount
+  useEffect(() => {
+    return () => {
+      if (isSpeechSynthesisSupported) {
+        window.speechSynthesis.cancel();
+      }
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+    };
+  }, []);
+
   return (
     <div className={`chat-window ${isMinimized ? 'chat-window-minimized' : ''}`}>
       {/* Header */}
@@ -64,6 +162,34 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
           )}
         </div>
         <div className="chat-header-actions">
+          {isSpeechSynthesisSupported && (
+            <button
+              className={`chat-header-btn ${voiceOutputEnabled ? 'voice-active' : ''}`}
+              onClick={() => {
+                setVoiceOutputEnabled(!voiceOutputEnabled);
+                if (voiceOutputEnabled) {
+                  window.speechSynthesis.cancel();
+                }
+              }}
+              title={voiceOutputEnabled ? "Disable voice responses" : "Enable voice responses"}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                {voiceOutputEnabled ? (
+                  <>
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+                  </>
+                ) : (
+                  <>
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                    <line x1="23" y1="9" x2="17" y2="15" />
+                    <line x1="17" y1="9" x2="23" y2="15" />
+                  </>
+                )}
+              </svg>
+            </button>
+          )}
           <button
             className="chat-header-btn"
             onClick={onClearConversation}
@@ -218,11 +344,27 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
         <input
           type="text"
           className="chat-input"
-          placeholder="Ask a question about FAR..."
+          placeholder={isListening ? "Listening..." : "Ask a question about FAR..."}
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
-          disabled={isLoading}
+          disabled={isLoading || isListening}
         />
+        {isSpeechRecognitionSupported && (
+          <button
+            type="button"
+            className={`chat-voice-btn ${isListening ? 'listening' : ''}`}
+            onClick={isListening ? stopListening : startListening}
+            disabled={isLoading}
+            title={isListening ? "Stop listening" : "Voice input"}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+              <line x1="12" y1="19" x2="12" y2="23" />
+              <line x1="8" y1="23" x2="16" y2="23" />
+            </svg>
+          </button>
+        )}
         <button
           type="submit"
           className="chat-send-btn"
