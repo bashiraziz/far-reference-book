@@ -19,11 +19,16 @@ Always verify information with official sources and qualified legal counsel for 
 
 Welcome to the FAR Reference Book - your comprehensive guide to all 53 Parts of the Federal Acquisition Regulations.
 
-:::tip 💬 Try the AI-Powered FAR Assistant
+:::tip 💬 Try Rowshni - Your AI-Powered FAR Assistant
 
-**Have a question about federal acquisition regulations?** Our intelligent chatbot can instantly search through all 53 FAR Parts to provide answers with precise citations.
+**Have a question about federal acquisition regulations?** Rowshni, our intelligent chatbot, can instantly search through all 53 FAR Parts to provide answers with precise citations.
 
 **Click the pulsing purple button in the bottom-right corner to start chatting!**
+
+**🎤 Use Your Voice!** Rowshni supports full voice interaction:
+- **Speak your questions** - Click the microphone icon to ask questions hands-free
+- **Hear the answers** - Enable the speaker to have responses read aloud
+- **Smart formatting** - Automatically understands "section thirty two point zero zero six dash five"
 
 Example questions you can ask:
 - "What are the general contracting requirements?"
@@ -57,7 +62,7 @@ This reference book contains **all 53 FAR Parts**, providing complete coverage o
 ## How to Use This Reference
 
 - **🎧 Listen Instead of Read**: Click the speaker icon (top-right) to have any page read aloud with adjustable speed - perfect for multitasking or reducing eye strain
-- **AI Assistant**: Click the pulsing button in the bottom-right to ask questions and get instant answers with citations
+- **🎤 Rowshni AI Assistant**: Click the pulsing button (bottom-right) to chat with voice or text - ask questions hands-free and hear answers read aloud
 - **Browse by Part**: Use the sidebar navigation to explore specific parts and sections
 - **Search**: Use the search bar (top right) to find specific regulations, keywords, or topics
 - **Cross-References**: Click on section references (e.g., [1.301](./part-1/1.301.md)) to navigate between related sections
