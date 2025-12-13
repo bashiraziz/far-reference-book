@@ -64,6 +64,28 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
     }
   };
 
+  // Normalize FAR section numbers from speech recognition
+  const normalizeFARSectionNumbers = (text: string): string => {
+    let normalized = text;
+
+    // Fix section numbers like "32. 006" or "32 .006" → "32.006"
+    normalized = normalized.replace(/(\d+)\s*\.\s*(\d+)/g, '$1.$2');
+
+    // Fix subsection dashes like "6 - 5" or "6- 5" → "6-5"
+    normalized = normalized.replace(/(\d+)\s*-\s*(\d+)/g, '$1-$2');
+
+    // Fix "section 32. 006- 5" type patterns (combination of above)
+    normalized = normalized.replace(/section\s+(\d+)\s*\.\s*(\d+)\s*-\s*(\d+)/gi, 'section $1.$2-$3');
+
+    // Fix "part 32. 0" → "part 32.0"
+    normalized = normalized.replace(/part\s+(\d+)\s*\.\s*(\d+)/gi, 'part $1.$2');
+
+    // Fix standalone patterns like "32.00 6" → "32.006" (digit followed by space and more digits after decimal)
+    normalized = normalized.replace(/(\d+\.\d+)\s+(\d+)/g, '$1$2');
+
+    return normalized;
+  };
+
   // Voice Input: Speech Recognition
   const startListening = () => {
     if (!isSpeechRecognitionSupported) {
@@ -84,7 +106,8 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
 
     recognition.onresult = (event: any) => {
       const transcript = event.results[0][0].transcript;
-      setInputValue(transcript);
+      const normalizedText = normalizeFARSectionNumbers(transcript);
+      setInputValue(normalizedText);
       setIsListening(false);
     };
 
