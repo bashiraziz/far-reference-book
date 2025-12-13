@@ -18,9 +18,9 @@ The project leverages **[SpecKit](https://github.com/github/spec-kit)**, a speci
 
 ## Special Thanks
 
-### Panaversity
+### Panaversity & PIAIC
 
-Deep gratitude to the educators and community at **[Panaversity](https://panaversity.org/)** for their invaluable guidance and unwavering support throughout this project. Their commitment to fostering innovation and learning made this work possible.
+Deep gratitude to the educators and community at **[Panaversity](https://panaversity.org/)** and **[PIAIC](https://www.piaic.org/)** for their invaluable guidance and unwavering support throughout this project. Their commitment to fostering innovation and learning made this work possible.
 
 ### Sir Zia Khan
 

@@ -92,29 +92,24 @@ const config: Config = {
       style: 'dark',
       links: [
         {
-          title: 'Resources',
+          title: 'Quick Links',
           items: [
             {
               label: 'Official FAR',
               href: 'https://www.acquisition.gov/browse/index/far',
             },
-          ],
-        },
-        {
-          title: 'Community',
-          items: [
             {
-              label: 'GitHub Repository',
+              label: 'GitHub',
               href: 'https://github.com/bashiraziz/far-reference-book',
             },
             {
-              label: 'bashiraziz@gmail.com',
-              href: '#',
+              label: 'Contact',
+              href: 'mailto:bashiraziz@gmail.com',
             },
           ],
         },
       ],
-      copyright: `FAR Reference Book built with Docusaurus by Bashir Aziz and contribution from the community.`,
+      copyright: `Built with Docusaurus • Open Source • Powered by Google Gemini`,
     },
     prism: {
       theme: prismThemes.github,
