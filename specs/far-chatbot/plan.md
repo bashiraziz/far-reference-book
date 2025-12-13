@@ -420,7 +420,6 @@ Request:
 }
 ```
 
-Response:
 ```typescript
 {
   user_message: {
