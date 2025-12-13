@@ -42,10 +42,37 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
   const [inputValue, setInputValue] = useState('');
   const [isListening, setIsListening] = useState(false);
   const [voiceOutputEnabled, setVoiceOutputEnabled] = useState(false);
+  const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
+  const [selectedVoice, setSelectedVoice] = useState<SpeechSynthesisVoice | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const previousMessageCountRef = useRef(messages.length);
   const recognitionRef = useRef<any>(null);
   const lastSpokenMessageIdRef = useRef<string | null>(null);
+
+  // Load available voices for TTS
+  useEffect(() => {
+    if (!isSpeechSynthesisSupported) return;
+
+    const loadVoices = () => {
+      const voices = window.speechSynthesis.getVoices();
+      setAvailableVoices(voices);
+
+      // Set default voice (prefer English US female if available)
+      if (voices.length > 0 && !selectedVoice) {
+        const defaultVoice = voices.find(v => v.lang.startsWith('en-US') && v.name.toLowerCase().includes('female'))
+          || voices.find(v => v.lang.startsWith('en'))
+          || voices[0];
+        setSelectedVoice(defaultVoice);
+      }
+    };
+
+    loadVoices();
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+
+    return () => {
+      window.speechSynthesis.onvoiceschanged = null;
+    };
+  }, [isSpeechSynthesisSupported]);
 
   // Auto-scroll to bottom ONLY when new messages are added (not on mount)
   useEffect(() => {
@@ -203,10 +230,13 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
       utterance.rate = 1.0;
       utterance.pitch = 1;
       utterance.volume = 1;
+      if (selectedVoice) {
+        utterance.voice = selectedVoice;
+      }
 
       window.speechSynthesis.speak(utterance);
     }
-  }, [messages, voiceOutputEnabled, streamingMessageId]);
+  }, [messages, voiceOutputEnabled, streamingMessageId, selectedVoice]);
 
   // Cleanup speech on unmount
   useEffect(() => {
@@ -288,6 +318,34 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
           </button>
         </div>
       </div>
+
+      {/* Voice settings - show when voice output is enabled and not minimized */}
+      {!isMinimized && voiceOutputEnabled && availableVoices.length > 0 && (
+        <div className="chat-voice-settings">
+          <label htmlFor="chat-voice-select">Voice:</label>
+          <select
+            id="chat-voice-select"
+            value={selectedVoice?.name || ''}
+            onChange={(e) => {
+              const voice = availableVoices.find(v => v.name === e.target.value);
+              if (voice) {
+                setSelectedVoice(voice);
+              }
+            }}
+            className="chat-voice-dropdown"
+          >
+            {availableVoices
+              .filter(v => v.lang.startsWith('en'))
+              .map(voice => (
+                <option key={voice.name} value={voice.name}>
+                  {voice.name.split(/[-(]/)[0].trim()}
+                  {voice.name.toLowerCase().includes('female') ? ' (F)' :
+                   voice.name.toLowerCase().includes('male') && !voice.name.toLowerCase().includes('female') ? ' (M)' : ''}
+                </option>
+              ))}
+          </select>
+        </div>
+      )}
 
       {/* Messages - hide when minimized */}
       {!isMinimized && (

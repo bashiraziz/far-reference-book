@@ -112,7 +112,8 @@
   border-color: #dc3545;
 }
 
-.tts-rate-control {
+.tts-rate-control,
+.tts-voice-control {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -122,14 +123,17 @@
   border-radius: 6px;
 }
 
-.tts-rate-control label {
+.tts-rate-control label,
+.tts-voice-control label {
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--ifm-color-content);
   margin: 0;
+  white-space: nowrap;
 }
 
-.tts-rate-select {
+.tts-rate-select,
+.tts-voice-select {
   padding: 0.25rem 0.5rem;
   border: 1px solid var(--ifm-color-emphasis-300);
   border-radius: 4px;
@@ -137,9 +141,15 @@
   color: var(--ifm-color-content);
   font-size: 0.875rem;
   cursor: pointer;
+  min-width: 100px;
 }
 
-.tts-rate-select:focus {
+.tts-voice-select {
+  max-width: 150px;
+}
+
+.tts-rate-select:focus,
+.tts-voice-select:focus {
   outline: 2px solid var(--ifm-color-primary);
   outline-offset: 2px;
 }

@@ -6,10 +6,37 @@ export function TextToSpeech(): JSX.Element {
   const [isPaused, setIsPaused] = useState(false);
   const [speechRate, setSpeechRate] = useState(1.0);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
+  const [selectedVoice, setSelectedVoice] = useState<SpeechSynthesisVoice | null>(null);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   // Check if speech synthesis is supported
   const isSpeechSupported = typeof window !== 'undefined' && 'speechSynthesis' in window;
+
+  // Load available voices
+  useEffect(() => {
+    if (!isSpeechSupported) return;
+
+    const loadVoices = () => {
+      const voices = window.speechSynthesis.getVoices();
+      setAvailableVoices(voices);
+
+      // Set default voice (prefer English US female if available)
+      if (voices.length > 0 && !selectedVoice) {
+        const defaultVoice = voices.find(v => v.lang.startsWith('en-US') && v.name.toLowerCase().includes('female'))
+          || voices.find(v => v.lang.startsWith('en'))
+          || voices[0];
+        setSelectedVoice(defaultVoice);
+      }
+    };
+
+    loadVoices();
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+
+    return () => {
+      window.speechSynthesis.onvoiceschanged = null;
+    };
+  }, [isSpeechSupported]);
 
   const getArticleText = (): string => {
     // Get main article content, excluding navigation and other UI elements
@@ -67,6 +94,9 @@ export function TextToSpeech(): JSX.Element {
     utterance.rate = speechRate;
     utterance.pitch = 1;
     utterance.volume = 1;
+    if (selectedVoice) {
+      utterance.voice = selectedVoice;
+    }
 
     utterance.onstart = () => {
       setIsPlaying(true);
@@ -204,6 +234,38 @@ export function TextToSpeech(): JSX.Element {
               <option value="2">2x</option>
             </select>
           </div>
+
+          {availableVoices.length > 0 && (
+            <div className="tts-voice-control">
+              <label htmlFor="speech-voice">Voice:</label>
+              <select
+                id="speech-voice"
+                value={selectedVoice?.name || ''}
+                onChange={(e) => {
+                  const voice = availableVoices.find(v => v.name === e.target.value);
+                  if (voice) {
+                    setSelectedVoice(voice);
+                    // If currently playing, restart with new voice
+                    if (isPlaying || isPaused) {
+                      handleStop();
+                      setTimeout(() => handlePlay(), 100);
+                    }
+                  }
+                }}
+                className="tts-voice-select"
+              >
+                {availableVoices
+                  .filter(v => v.lang.startsWith('en'))
+                  .map(voice => (
+                    <option key={voice.name} value={voice.name}>
+                      {voice.name.split(/[-(]/)[0].trim()}
+                      {voice.name.toLowerCase().includes('female') ? ' (F)' :
+                       voice.name.toLowerCase().includes('male') && !voice.name.toLowerCase().includes('female') ? ' (M)' : ''}
+                    </option>
+                  ))}
+              </select>
+            </div>
+          )}
 
           {(isPlaying || isPaused) && (
             <div className="tts-status">
