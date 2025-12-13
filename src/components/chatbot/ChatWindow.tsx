@@ -68,20 +68,66 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
   const normalizeFARSectionNumbers = (text: string): string => {
     let normalized = text;
 
-    // Fix section numbers like "32. 006" or "32 .006" → "32.006"
+    // Map of spelled-out numbers to digits
+    const numberMap: { [key: string]: string } = {
+      'zero': '0', 'one': '1', 'two': '2', 'three': '3', 'four': '4',
+      'five': '5', 'six': '6', 'seven': '7', 'eight': '8', 'nine': '9',
+      'ten': '10', 'eleven': '11', 'twelve': '12', 'thirteen': '13',
+      'fourteen': '14', 'fifteen': '15', 'sixteen': '16', 'seventeen': '17',
+      'eighteen': '18', 'nineteen': '19', 'twenty': '20', 'thirty': '30',
+      'forty': '40', 'fifty': '50', 'sixty': '60', 'seventy': '70',
+      'eighty': '80', 'ninety': '90'
+    };
+
+    // Convert spelled-out numbers (e.g., "thirty two" → "32", "twenty one" → "21")
+    const spelledNumberRegex = /\b(twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety)[\s-]+(one|two|three|four|five|six|seven|eight|nine)\b/gi;
+    normalized = normalized.replace(spelledNumberRegex, (match, tens, ones) => {
+      const tensValue = parseInt(numberMap[tens.toLowerCase()]);
+      const onesValue = parseInt(numberMap[ones.toLowerCase()]);
+      return String(tensValue + onesValue);
+    });
+
+    // Convert single spelled-out numbers
+    Object.keys(numberMap).forEach(word => {
+      const regex = new RegExp(`\\b${word}\\b`, 'gi');
+      normalized = normalized.replace(regex, numberMap[word]);
+    });
+
+    // Replace "point" with "."
+    normalized = normalized.replace(/\bpoint\b/gi, '.');
+
+    // Replace "dash" or "hyphen" with "-"
+    normalized = normalized.replace(/\b(dash|hyphen)\b/gi, '-');
+
+    // Replace "section" variations (make it lowercase for consistency)
+    normalized = normalized.replace(/\bsection\b/gi, 'section');
+    normalized = normalized.replace(/\bpart\b/gi, 'part');
+
+    // Fix multiple consecutive spaces
+    normalized = normalized.replace(/\s+/g, ' ');
+
+    // Fix section numbers with spaces around dots: "32. 006" or "32 .006" → "32.006"
     normalized = normalized.replace(/(\d+)\s*\.\s*(\d+)/g, '$1.$2');
 
-    // Fix subsection dashes like "6 - 5" or "6- 5" → "6-5"
+    // Fix subsection dashes with spaces: "6 - 5" or "6- 5" → "6-5"
     normalized = normalized.replace(/(\d+)\s*-\s*(\d+)/g, '$1-$2');
 
-    // Fix "section 32. 006- 5" type patterns (combination of above)
-    normalized = normalized.replace(/section\s+(\d+)\s*\.\s*(\d+)\s*-\s*(\d+)/gi, 'section $1.$2-$3');
+    // Fix patterns like "32.00 6" → "32.006" (spaces within decimal numbers)
+    normalized = normalized.replace(/(\d+)\.(\d+)\s+(\d+)/g, '$1.$2$3');
 
-    // Fix "part 32. 0" → "part 32.0"
-    normalized = normalized.replace(/part\s+(\d+)\s*\.\s*(\d+)/gi, 'part $1.$2');
+    // Fix "section 32 006" (missing dot entirely) → "section 32.006"
+    normalized = normalized.replace(/section\s+(\d+)\s+(\d{3,})/gi, 'section $1.$2');
 
-    // Fix standalone patterns like "32.00 6" → "32.006" (digit followed by space and more digits after decimal)
-    normalized = normalized.replace(/(\d+\.\d+)\s+(\d+)/g, '$1$2');
+    // Fix "part 32 0" (missing dot) → "part 32.0"
+    normalized = normalized.replace(/part\s+(\d+)\s+(\d+)/gi, 'part $1.$2');
+
+    // Handle leading zeros: ensure "6" becomes "006" when in context like "32.6-5" → "32.006-5"
+    normalized = normalized.replace(/(\d+)\.(\d{1,2})(?=-)/g, (match, part, subsection) => {
+      return `${part}.${subsection.padStart(3, '0')}`;
+    });
+
+    // Clean up any remaining double spaces
+    normalized = normalized.replace(/\s+/g, ' ').trim();
 
     return normalized;
   };
