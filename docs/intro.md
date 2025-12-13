@@ -19,35 +19,19 @@ Always verify information with official sources and qualified legal counsel for 
 
 Welcome to the FAR Reference Book - your comprehensive guide to all 53 Parts of the Federal Acquisition Regulations.
 
-:::tip 💬 Try Rowshni - Your AI-Powered FAR Assistant
+:::tip 💬 Rowshni - Your AI-Powered FAR Assistant
 
-**Have a question about federal acquisition regulations?** Rowshni, our intelligent chatbot, can instantly search through all 53 FAR Parts to provide answers with precise citations.
+**Click the pulsing purple button** (bottom-right) to chat with Rowshni and get instant answers from all 53 FAR Parts with precise citations.
 
-**Click the pulsing purple button in the bottom-right corner to start chatting!**
+**🎤 Voice Support:** Speak questions via microphone, hear answers read aloud, and choose from multiple voice options. Understands spoken section numbers like "section thirty two point zero zero six dash five".
 
-**🎤 Use Your Voice!** Rowshni supports full voice interaction:
-- **Speak your questions** - Click the microphone icon to ask questions hands-free
-- **Hear the answers** - Enable the speaker to have responses read aloud
-- **Smart formatting** - Automatically understands "section thirty two point zero zero six dash five"
-
-Example questions you can ask:
-- "What are the general contracting requirements?"
-- "Explain the policy on contract modifications"
-- "What are the rules for small business set-asides?"
+**Try asking:** "What are the general contracting requirements?" • "Explain contract modifications" • "What are small business set-aside rules?"
 
 :::
 
 :::info 🎧 Listen to FAR Content
 
-**Prefer listening over reading?** Every page has a built-in audio reader!
-
-**Click the speaker icon in the top-right corner** to have the page content read aloud. You can:
-- Play, pause, and stop at any time
-- Adjust reading speed (0.5x to 2x)
-- Multitask while learning
-- Reduce eye strain during long reading sessions
-
-Works on desktop and mobile browsers - no downloads or sign-ups needed!
+**Click the speaker icon** (top-right) to have any page read aloud. Adjust speed (0.5x-2x), choose voices, and multitask while learning. Perfect for reducing eye strain!
 
 :::
 
