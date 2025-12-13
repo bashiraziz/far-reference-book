@@ -92,7 +92,6 @@ const config: Config = {
       style: 'dark',
       links: [
         {
-          title: 'Quick Links',
           items: [
             {
               label: 'Official FAR',
@@ -103,7 +102,7 @@ const config: Config = {
               href: 'https://github.com/bashiraziz/far-reference-book',
             },
             {
-              label: 'Contact',
+              label: 'bashiraziz@gmail.com',
               href: 'mailto:bashiraziz@gmail.com',
             },
           ],

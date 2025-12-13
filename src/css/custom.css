@@ -161,6 +161,22 @@
 
 .footer__links {
   margin-bottom: 0.8rem;  /* Reduced from default 1rem */
+  text-align: center;  /* Center the links */
+}
+
+/* Make footer links horizontal */
+.footer__col {
+  flex: 1 1 100%;  /* Take full width */
+  text-align: center;
+}
+
+.footer__items {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;  /* Space between links */
+  flex-wrap: wrap;
 }
 
 .footer__title {
@@ -171,6 +187,10 @@
 .footer__item {
   padding: 0.3rem 0;  /* Reduced from default 0.4rem */
   line-height: 1.4;  /* Tighter line height */
+}
+
+.footer__link-item {
+  display: inline-block;  /* Make links inline */
 }
 
 .footer__copyright {
