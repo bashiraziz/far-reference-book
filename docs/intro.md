@@ -32,6 +32,20 @@ Example questions you can ask:
 
 :::
 
+:::info 🎧 Listen to FAR Content
+
+**Prefer listening over reading?** Every page has a built-in audio reader!
+
+**Click the speaker icon in the top-right corner** to have the page content read aloud. You can:
+- Play, pause, and stop at any time
+- Adjust reading speed (0.5x to 2x)
+- Multitask while learning
+- Reduce eye strain during long reading sessions
+
+Works on desktop and mobile browsers - no downloads or sign-ups needed!
+
+:::
+
 ## About the FAR
 
 The Federal Acquisition Regulation (FAR) is the primary regulation for use by all federal executive agencies in their acquisition of supplies and services with appropriated funds. The FAR System consists of the FAR, which is the primary document, and agency acquisition regulations that implement or supplement the FAR.
@@ -42,6 +56,7 @@ This reference book contains **all 53 FAR Parts**, providing complete coverage o
 
 ## How to Use This Reference
 
+- **🎧 Listen Instead of Read**: Click the speaker icon (top-right) to have any page read aloud with adjustable speed - perfect for multitasking or reducing eye strain
 - **AI Assistant**: Click the pulsing button in the bottom-right to ask questions and get instant answers with citations
 - **Browse by Part**: Use the sidebar navigation to explore specific parts and sections
 - **Search**: Use the search bar (top right) to find specific regulations, keywords, or topics
