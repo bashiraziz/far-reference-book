@@ -6,8 +6,8 @@
   position: fixed;
   bottom: 80px;
   right: 24px;
-  width: 320px;  /* Reduced from 400px (20% smaller) */
-  height: 480px; /* Reduced from 600px (20% smaller) */
+  width: 352px;  /* Increased by 10% from 320px */
+  height: 528px; /* Increased by 10% from 480px */
   background: white;
   border-radius: 12px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
